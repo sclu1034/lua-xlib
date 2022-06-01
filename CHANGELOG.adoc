@@ -1,0 +1,11 @@
+= Changelog
+:toc:
+:toclevels: 1
+:idprefix:
+:idseparator: -
+
+== [Unreleased]
+
+=== Added
+
+* initial release

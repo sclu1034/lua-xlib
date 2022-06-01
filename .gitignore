@@ -1,0 +1,12 @@
+out/
+
+.gdb_history
+.gdbinit
+lua.debug
+
+.cache/clangd
+compile_commands.json
+.sass-cache
+
+*.rockspec.asc
+*.src.rock
