@@ -134,6 +134,7 @@ int output_info__gc(lua_State*);
 int output_info__index(lua_State*);
 int xrandr_get_output_info(lua_State*);
 int xrandr_get_output_primary(lua_State*);
+int xrandr_set_output_primary(lua_State*);
 
 
 static const struct luaL_Reg output_info_mt[] = {
@@ -173,6 +174,7 @@ static const struct luaL_Reg xrandr_lib[] = {
     { "XRRGetOutputInfo",     xrandr_get_output_info     },
     { "XRRGetOutputPrimary",  xrandr_get_output_primary  },
     { "XRRGetCrtcInfo",       xrandr_get_crtc_info       },
+    { "XRRSetOutputPrimary",  xrandr_set_output_primary  },
     { NULL,                   NULL                       }
 };
 

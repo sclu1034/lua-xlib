@@ -86,6 +86,14 @@ int xrandr_get_output_primary(lua_State* L) {
     return 1;
 }
 
+int xrandr_set_output_primary(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    lua_Integer window = luaL_checkinteger(L, 2);
+    lua_Integer output = luaL_checkinteger(L, 3);
+    XRRSetOutputPrimary(display->inner, (Window) window, (RROutput) output);
+    return 1;
+}
+
 int output_info__gc(lua_State* L) {
     output_info_t* out = luaL_checkudata(L, 1, LUA_XRANDR_OUTPUT_INFO);
     XRRFreeOutputInfo(out->inner);
