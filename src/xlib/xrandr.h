@@ -20,6 +20,7 @@
 #define LUA_XRANDR                  "xlib.xrandr"
 #define LUA_XRANDR_SCREEN_RESOURCES "xlib.xrandr.screen_resources"
 #define LUA_XRANDR_OUTPUT_INFO      "xlib.xrandr.output_info"
+#define LUA_XRANDR_CRTC_INFO        "xlib.xrandr.crtc_info"
 
 // Enums as defined in https://cgit.freedesktop.org/xorg/proto/randrproto/tree/randrproto.txt
 
@@ -107,6 +108,13 @@ int screen_resources__index(lua_State*);
 int xrandr_get_screen_resources(lua_State*);
 
 
+static const struct luaL_Reg screen_resources_mt[] = {
+    {"__gc",     screen_resources__gc   },
+    { "__index", screen_resources__index},
+    { NULL,      NULL                   }
+};
+
+
 /** Output
  * @table output
  * @field[type=string] name
@@ -125,13 +133,7 @@ typedef struct {
 int output_info__gc(lua_State*);
 int output_info__index(lua_State*);
 int xrandr_get_output_info(lua_State*);
-
-
-static const struct luaL_Reg screen_resources_mt[] = {
-    {"__gc",     screen_resources__gc   },
-    { "__index", screen_resources__index},
-    { NULL,      NULL                   }
-};
+int xrandr_get_output_primary(lua_State*);
 
 
 static const struct luaL_Reg output_info_mt[] = {
@@ -141,9 +143,36 @@ static const struct luaL_Reg output_info_mt[] = {
 };
 
 
+/** CRTC Info
+ * @table crtc
+ * @field[type=string] name
+ * @field[type=number] mm_width
+ * @field[type=number] mm_height
+ * @field[type=string] connection
+ * @field[type=string] subpixel_order
+ * @field[type=array<mode>] modes
+ */
+typedef struct {
+    XRRCrtcInfo* inner;
+} crtc_info_t;
+
+int crtc_info__gc(lua_State*);
+int crtc_info__index(lua_State*);
+int xrandr_get_crtc_info(lua_State*);
+
+
+static const struct luaL_Reg crtc_info_mt[] = {
+    {"__gc",     crtc_info__gc   },
+    { "__index", crtc_info__index},
+    { NULL,      NULL            }
+};
+
+
 static const struct luaL_Reg xrandr_lib[] = {
     {"XRRGetScreenResources", xrandr_get_screen_resources},
     { "XRRGetOutputInfo",     xrandr_get_output_info     },
+    { "XRRGetOutputPrimary",  xrandr_get_output_primary  },
+    { "XRRGetCrtcInfo",       xrandr_get_crtc_info       },
     { NULL,                   NULL                       }
 };
 

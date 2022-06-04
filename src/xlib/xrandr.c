@@ -79,6 +79,13 @@ int xrandr_get_output_info(lua_State* L) {
     return 1;
 }
 
+int xrandr_get_output_primary(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    lua_Integer window = luaL_checkinteger(L, 2);
+    lua_pushboolean(L, XRRGetOutputPrimary(display->inner, (Window) window));
+    return 1;
+}
+
 int output_info__gc(lua_State* L) {
     output_info_t* out = luaL_checkudata(L, 1, LUA_XRANDR_OUTPUT_INFO);
     XRRFreeOutputInfo(out->inner);
@@ -183,6 +190,70 @@ int screen_resources__index(lua_State* L) {
     return 1;
 }
 
+int xrandr_get_crtc_info(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    screen_resources_t* res = luaL_checkudata(L, 2, LUA_XRANDR_SCREEN_RESOURCES);
+    lua_Integer crtc = luaL_checkinteger(L, 3);
+
+    XRRCrtcInfo* info = XRRGetCrtcInfo(display->inner, res->inner, (RRCrtc) crtc);
+    if (!info) {
+        return luaL_error(L, "Failed to get info for crtc %d", crtc);
+    }
+
+    crtc_info_t* out = lua_newuserdata(L, sizeof(crtc_info_t));
+    luaL_getmetatable(L, LUA_XRANDR_CRTC_INFO);
+    lua_setmetatable(L, -2);
+
+    out->inner = info;
+
+    return 1;
+}
+
+int crtc_info__gc(lua_State* L) {
+    crtc_info_t* res = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
+    XRRFreeCrtcInfo(res->inner);
+    return 0;
+}
+
+int crtc_info__index(lua_State* L) {
+    crtc_info_t* res = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
+    const char* key = luaL_checkstring(L, 2);
+
+    if (strcmp(key, "timestamp") == 0) {
+        lua_pushinteger(L, res->inner->timestamp);
+    } else if (strcmp(key, "x") == 0) {
+        lua_pushinteger(L, res->inner->x);
+    } else if (strcmp(key, "y") == 0) {
+        lua_pushinteger(L, res->inner->y);
+    } else if (strcmp(key, "height") == 0) {
+        lua_pushinteger(L, res->inner->height);
+    } else if (strcmp(key, "width") == 0) {
+        lua_pushinteger(L, res->inner->width);
+    } else if (strcmp(key, "mode") == 0) {
+        lua_pushinteger(L, res->inner->mode);
+    } else if (strcmp(key, "rotation") == 0) {
+        lua_pushinteger(L, res->inner->rotation);
+    } else if (strcmp(key, "rotations") == 0) {
+        lua_pushinteger(L, res->inner->rotations);
+    } else if (strcmp(key, "outputs") == 0) {
+        lua_createtable(L, 0, res->inner->noutput);
+        for (int i = 0; i < res->inner->noutput; ++i) {
+            lua_pushinteger(L, res->inner->outputs[i]);
+            lua_rawseti(L, -2, i + 1);
+        }
+    } else if (strcmp(key, "possible") == 0) {
+        lua_createtable(L, 0, res->inner->npossible);
+        for (int i = 0; i < res->inner->npossible; ++i) {
+            lua_pushinteger(L, res->inner->possible[i]);
+            lua_rawseti(L, -2, i + 1);
+        }
+    } else {
+        lua_pushnil(L);
+    }
+
+    return 1;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);
@@ -190,6 +261,9 @@ LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
 
     luaL_newmetatable(L, LUA_XRANDR_OUTPUT_INFO);
     luaL_setfuncs(L, output_info_mt, 0);
+
+    luaL_newmetatable(L, LUA_XRANDR_CRTC_INFO);
+    luaL_setfuncs(L, crtc_info_mt, 0);
 
     luaL_newmetatable(L, LUA_XRANDR);
 
