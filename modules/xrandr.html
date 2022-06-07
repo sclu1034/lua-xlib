@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lua-xlib</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+
+<aside id="sidebar" class="has-background-white-ter">
+    <h1 class="title">lua-xlib</h1>
+    <nav class="menu">
+        <ul class="menu-list">
+            <li><a class="" href="../index.html">Index</a></li>
+        </ul>
+        <p class="menu-label">Modules</p>
+        <ul class="menu-list">
+            <li><a href="../modules/xlib.html">xlib</a></li>
+            <li>
+                <a class="is-active">xrandr</a>
+                <ul>
+                    <li><a href="#toc">Table of contents</a></li>
+                    <li><a href="#Functions">Functions</a></li>
+                    <li><a href="#Tables">Tables</a></li>
+                </ul>
+            </li>
+        </ul>
+        <p class="menu-label">Topics</p>
+        <ul class="menu-list">
+            <li><a href="../topics/randr.md.html">randr</a></li>
+        </ul>
+    </nav>
+</aside>
+<div id="content" class="content__wrapper">
+    <section class="section section__module-description">
+        <div class="container">
+            <h1 class="title is-1">Module <em>xrandr</em></h1>
+            <h3 class="subtitle is-3">Lua bindings for <code>libxrandr</code>.</h3>
+            <div class="content">
+                <p> Documentation here will extend the official library&rsquo;s documentation, not replace it.
+ Please take a look at the <a href="https://www.x.org/wiki/libraries/libxrandr/">libxrandr documentation</a> before use,
+ especially the <a href="http://cgit.freedesktop.org/xorg/proto/randrproto/tree/randrproto.txt">protocol specification</a>
+ and <a href="https://cgit.freedesktop.org/xorg/lib/libXrandr/tree/include/X11/extensions/Xrandr.h">Xrandr.h</a>.
+ Additionally, <code>libxrandr</code> provides man pages locally (packaging depends on the distribution).</p>
+            </div>
+        </div>
+    </section>
+    <section class="section section__module-summary">
+        <div class="container">
+            <h2 id="toc" class="title is-3">Table of contents</h2>
+            <h3 class="title is-4"><a href="#Functions">Functions</a></h3>
+            <table class="table is-fullwidth is-striped">
+                <tbody>
+                    <tr>
+                        <td class="name"><a href="#XRRGetScreenResources">XRRGetScreenResources(display, window)</a></td>
+                        <td class="summary">Queries the current <a href="../modules/xrandr.html#XRRScreenResources">XRRScreenResources</a>.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRGetOutputInfo">XRRGetOutputInfo(display, resources, output)</a></td>
+                        <td class="summary">Returns information about the given output.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRGetOutputPrimary">XRRGetOutputPrimary(display, window)</a></td>
+                        <td class="summary">Returns the primary output for the given window.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRSetOutputPrimary">XRRSetOutputPrimary(display, window, output)</a></td>
+                        <td class="summary">Sets the given output as primary for the window.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRGetCrtcInfo">XRRGetCrtcInfo(display, resources, crtc)</a></td>
+                        <td class="summary">Returns information about the given CRTC.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRSetCrtcConfig">XRRSetCrtcConfig(display, resources, crtc, timestamp, x, y, mode, rotation, outputs)</a></td>
+                        <td class="summary">Sets CRTC configuration.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3 class="title is-4"><a href="#Tables">Tables</a></h3>
+            <table class="table is-fullwidth is-striped">
+                <tbody>
+                    <tr>
+                        <td class="name"><a href="#XRRModeFlags">XRRModeFlags</a></td>
+                        <td class="summary">This table maps the bitfield to individual booleans.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRMode">XRRMode</a></td>
+                        <td class="summary">Contrary to the other types in this module, this is provided as an actual Lua table, rather than userdata.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRScreenResources">XRRScreenResources</a></td>
+                        <td class="summary">
+</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRROutputInfo">XRROutputInfo</a></td>
+                        <td class="summary">
+</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRCrtcInfo">XRRCrtcInfo</a></td>
+                        <td class="summary">
+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section section--Functions">
+        <div class="container">
+            <h2 class="title is-2" id="Functions"><a href="#Functions">Functions</a></h2>
+            <div class="section__content">
+                <div id="XRRGetScreenResources" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRGetScreenResources(display, window)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Queries the current <a href="../modules/xrandr.html#XRRScreenResources">XRRScreenResources</a>.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>window</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the window to query.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="../modules/xrandr.html#XRRScreenResources">XRRScreenResources</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="keyword">local</span> display = xlib.xlib.XOpenDisplay()
+<span class="keyword">local</span> screen = xlib.DefaultScreen(display)
+<span class="keyword">local</span> root = xlib.RootWindow(display, screen)
+<span class="keyword">local</span> res = xrandr.XRRGetScreenResources(display, root)</pre>
+                    </div>
+                </div>
+                <div id="XRRGetOutputInfo" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRGetOutputInfo(display, resources, output)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns information about the given output. </p>
+
+<p> This returns a userdatum that wrapping the output info data. Table index operations
+ are supported to retrieve the fields described in <a href="../modules/xrandr.html#XRROutputInfo">XRROutputInfo</a>.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>resources</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">screen_resources</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output to fetch information about.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="../modules/xrandr.html#XRROutputInfo">XRROutputInfo</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="keyword">local</span> res = xrandr.XRRGetScreenResources(display, root)
+<span class="keyword">for</span> _, output <span class="keyword">in</span> <span class="global">ipairs</span>(res.outputs) <span class="keyword">do</span>
+    <span class="keyword">local</span> info = xrandr.XRRGetOutputInfo(display, res, output)
+    printf(<span class="string">"%s %s"</span>, info.name, info.connection)
+<span class="keyword">end</span></pre>
+                    </div>
+                </div>
+                <div id="XRRGetOutputPrimary" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRGetOutputPrimary(display, window)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the primary output for the given window.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>window</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the window to query.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>The XID of the primary output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="keyword">local</span> res = xrandr.XRRGetScreenResources(display, root)
+<span class="keyword">local</span> primary = xrandr.XRRGetOutputPrimary(display, root)
+<span class="keyword">for</span> _, output <span class="keyword">in</span> <span class="global">ipairs</span>(res.outputs) <span class="keyword">do</span>
+    <span class="keyword">if</span> output == primary <span class="keyword">then</span>
+      <span class="keyword">local</span> info = xrandr.XRRGetOutputInfo(display, res, output)
+      printf(<span class="string">"Primary: %s"</span>, info.name)
+    <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                    </div>
+                </div>
+                <div id="XRRSetOutputPrimary" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRSetOutputPrimary(display, window, output)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Sets the given output as primary for the window.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>window</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the window.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRGetCrtcInfo" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRGetCrtcInfo(display, resources, crtc)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns information about the given CRTC. </p>
+
+<p> This returns a userdatum that wrapping the CRTC info data. Table index operations
+ are supported to retrieve the fields described in <a href="../modules/xrandr.html#XRRCrtcInfo">XRRCrtcInfo</a>.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>resources</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">screen_resources</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>crtc</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the CRTC to fetch information about.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="../modules/xrandr.html#XRRCrtcInfo">XRRCrtcInfo</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="keyword">local</span> res = xrandr.XRRGetScreenResources(display, root)
+<span class="keyword">local</span> info = xrandr.XRRGetCrtcInfo(display, res, res.crtcs[<span class="number">1</span>])
+<span class="keyword">local</span> mode = find_by_id(res.modes, info.mode)
+<span class="global">require</span>(<span class="string">"pl.pretty"</span>).dump(mode)</pre>
+                    </div>
+                </div>
+                <div id="XRRSetCrtcConfig" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRSetCrtcConfig(display, resources, crtc, timestamp, x, y, mode, rotation, outputs)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Sets CRTC configuration.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>resources</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">screen_resources</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>crtc</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the CRTC to change.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>timestamp</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>x</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>y</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mode</em></span>
+                                    <span class="parameter__description">:&nbsp; The id of the <a href="../modules/xrandr.html#XRRMode">XRRMode</a> to set for this CRTC. If <code>0</code> or <code>nil</code> is passed,
+   the CRTC will be disabled.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span> or <span class="type">nil</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>rotation</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>outputs</em></span>
+                                    <span class="parameter__description">:&nbsp; The list of output XIDs to assign to this CRTC.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>An X11 <code>Status</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="keyword">local</span> res = xrandr.XRRGetScreenResources(display, root)
+<span class="keyword">local</span> info = xrandr.XRRGetCrtcInfo(display, res, res.crtcs[<span class="number">1</span>])
+<span class="keyword">local</span> mode = find_by_id(res.modes, info.mode)
+<span class="keyword">local</span> status = xrandr.XRRSetCrtcConfig(
+    display,
+    res,
+    res.crtcs[<span class="number">1</span>],
+    info.timestamp,
+    info.x,
+    info.y,
+    res.modes[<span class="number">2</span>].id,
+    info.rotation,
+    info.outputs
+)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section section--Tables">
+        <div class="container">
+            <h2 class="title is-2" id="Tables"><a href="#Tables">Tables</a></h2>
+            <div class="section__content">
+                <div id="XRRModeFlags" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRModeFlags</strong>
+                    </div>
+
+                    <div class="block content section__item__description">This table maps the bitfield to individual booleans.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>HSyncPositive</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>HSyncNegative</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>VSyncPositive</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>VSyncNegative</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>Interlace</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>DoubleScan</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CSync</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CSyncPositive</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CSyncNegative</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>HSkewPresent</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>BCast</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>PixelMultiplex</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>DoubleClock</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>ClockDivideBy2</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRMode" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRMode</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Contrary to the other types in this module, this is provided as an actual Lua table, rather than userdata.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>id</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>name</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>width</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>height</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>dotClock</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>hSyncStart</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>hSyncEnd</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>hTotal</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>hSkew</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>vSyncStart</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>vSyncEnd</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>vTotal</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>modeFlags</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xrandr.html#XRRModeFlags">XRRModeFlags</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRScreenResources" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRScreenResources</strong>
+                    </div>
+
+                    <div class="block content section__item__description">
+</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>timestamp</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>configTimestamp</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>crtcs</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>outputs</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>modes</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<XRRMode></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRROutputInfo" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRROutputInfo</strong>
+                    </div>
+
+                    <div class="block content section__item__description">
+</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>name</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mm_width</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mm_height</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>connection</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>subpixel_order</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>modes</em></span>
+                                    <span class="parameter__description">:&nbsp; List of IDs. These map to the mode list in <a href="../modules/xrandr.html#XRRScreenResources">XRRScreenResources</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>crtcs</em></span>
+                                    <span class="parameter__description">:&nbsp; List of XIDs</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>crtc</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRCrtcInfo" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRCrtcInfo</strong>
+                    </div>
+
+                    <div class="block content section__item__description">
+</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>name</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mm_width</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mm_height</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>connection</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>subpixel_order</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>modes</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table<number></a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-07 13:41:26.
+    </div>
+</footer>
+
+</body>
+</html>

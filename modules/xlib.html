@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lua-xlib</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+
+<aside id="sidebar" class="has-background-white-ter">
+    <h1 class="title">lua-xlib</h1>
+    <nav class="menu">
+        <ul class="menu-list">
+            <li><a class="" href="../index.html">Index</a></li>
+        </ul>
+        <p class="menu-label">Modules</p>
+        <ul class="menu-list">
+            <li>
+                <a class="is-active">xlib</a>
+                <ul>
+                    <li><a href="#toc">Table of contents</a></li>
+                    <li><a href="#Functions">Functions</a></li>
+                    <li><a href="#Tables">Tables</a></li>
+                </ul>
+            </li>
+            <li><a href="../modules/xrandr.html">xrandr</a></li>
+        </ul>
+        <p class="menu-label">Topics</p>
+        <ul class="menu-list">
+            <li><a href="../topics/randr.md.html">randr</a></li>
+        </ul>
+    </nav>
+</aside>
+<div id="content" class="content__wrapper">
+    <section class="section section__module-description">
+        <div class="container">
+            <h1 class="title is-1">Module <em>xlib</em></h1>
+            <h3 class="subtitle is-3">
+</h3>
+            <div class="content">
+                <p>
+</p>
+            </div>
+        </div>
+    </section>
+    <section class="section section__module-summary">
+        <div class="container">
+            <h2 id="toc" class="title is-3">Table of contents</h2>
+            <h3 class="title is-4"><a href="#Functions">Functions</a></h3>
+            <table class="table is-fullwidth is-striped">
+                <tbody>
+                    <tr>
+                        <td class="name"><a href="#DefaultScreen">DefaultScreen(display)</a></td>
+                        <td class="summary">Returns the default screen for the given display.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XDisplayName">XDisplayName([name])</a></td>
+                        <td class="summary">Returns the display name that <a href="../modules/xlib.html#XOpenDisplay">XOpenDisplay</a> would attempt to use.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#DisplayHeight">DisplayHeight(display, screen)</a></td>
+                        <td class="summary">Returns the height of the given screen in pixels.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#DisplayHeight">DisplayHeight(display, screen)</a></td>
+                        <td class="summary">Returns the width of the given screen in pixels.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XOpenDisplay">XOpenDisplay([display_name])</a></td>
+                        <td class="summary">Open a connection to the given display.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#RootWindow">RootWindow(display)</a></td>
+                        <td class="summary">Returns the root window for the given display.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#ScreenCount">ScreenCount(display)</a></td>
+                        <td class="summary">Returns the number of screens for the given display.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3 class="title is-4"><a href="#Tables">Tables</a></h3>
+            <table class="table is-fullwidth is-striped">
+                <tbody>
+                    <tr>
+                        <td class="name"><a href="#Display">Display</a></td>
+                        <td class="summary">
+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section section--Functions">
+        <div class="container">
+            <h2 class="title is-2" id="Functions"><a href="#Functions">Functions</a></h2>
+            <div class="section__content">
+                <div id="DefaultScreen" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>DefaultScreen(display)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the default screen for the given display.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XDisplayName" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XDisplayName([name])</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the display name that <a href="../modules/xlib.html#XOpenDisplay">XOpenDisplay</a> would attempt to use. </p>
+
+<p> If the argument is <code>nil</code>, XLib will check the <code>DISPLAY</code> environment variable.</p>
+
+<p> The main use case of this function is to report the name that <a href="../modules/xlib.html#XOpenDisplay">XOpenDisplay</a> attempted
+ when the initial connection attempt failed.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>name</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="control">
+                                        <div class="tags">
+                                            <span class="tag parameter__optional">optional</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="DisplayHeight" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>DisplayHeight(display, screen)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the height of the given screen in pixels.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>screen</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="DisplayHeight" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>DisplayHeight(display, screen)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the width of the given screen in pixels.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>screen</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XOpenDisplay" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XOpenDisplay([display_name])</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Open a connection to the given display. </p>
+
+<p> The connection is closed automatically when the returned handler is garbage collected
+ (i.e. when it goes out of scope).</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display_name</em></span>
+                                    <span class="parameter__description">:&nbsp; The connection string. When <code>nil</code>, XLib will fall back to the value of
+  the <code>DISPLAY</code> environment variable.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="control">
+                                        <div class="tags">
+                                            <span class="tag parameter__optional">optional</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="RootWindow" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>RootWindow(display)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the root window for the given display.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="ScreenCount" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>ScreenCount(display)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the number of screens for the given display.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section section--Tables">
+        <div class="container">
+            <h2 class="title is-2" id="Tables"><a href="#Tables">Tables</a></h2>
+            <div class="section__content">
+                <div id="Display" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>Display</strong>
+                    </div>
+
+                    <div class="block content section__item__description">
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-07 13:41:26.
+    </div>
+</footer>
+
+</body>
+</html>
