@@ -1,6 +1,3 @@
-/**
- * @module xlib
- */
 #include "xlib.h"
 
 #include "lua_util.h"
