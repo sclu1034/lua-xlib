@@ -4,8 +4,11 @@
 :idprefix:
 :idseparator: -
 
-== [Unreleased]
+== v0.1.0 - 2022-06-07
 
 === Added
 
 * initial release
+* implemented necessary function bindings to be able to change CRTC modes
+
+== [Unreleased]
