@@ -32,9 +32,42 @@ Lua bindings for https://x.org/releases/current/doc/libX11/libX11/libX11.html[XL
 
 == Quick Start
 
-Install _xlib_ via LuaRocks:
+Install _lua-xlib_ via LuaRocks:
 
 [source,shell]
 ----
-luarocks install xlib
+luarocks install lua-xlib
+----
+
+[source,lua]
+----
+local xlib = require("xlib")
+local xrandr = require("xlib.xrandr")
+
+local function find_by_size(list, w, h)
+  for _, v in ipairs(list) do
+    if v.width == w and v.height == h then
+      return v
+    end
+  end
+end
+
+local display = xlib.XOpenDisplay()
+local screen = xlib.DefaultScreen(display)
+local root = xlib.RootWindow(display, screen)
+local res = xrandr.XRRGetScreenResources(display, root)
+local info = xrandr.XRRGetCrtcInfo(display, res, res.crtcs[1])
+local mode = find_by_size(res.mode, 1600, 900)
+
+xrandr.XRRSetCrtcConfig(
+  display,
+  res,
+  res.ctcs[1]
+  info.timestamp,
+  info.x,
+  info.y,
+  mode.id,
+  info.rotation,
+  info.outputs
+)
 ----
