@@ -270,7 +270,7 @@ int xrandr_set_crtc_config(lua_State* L) {
     lua_Integer timestamp = luaL_checkinteger(L, 4);
     lua_Integer x = luaL_checkinteger(L, 5);
     lua_Integer y = luaL_checkinteger(L, 6);
-    lua_Integer mode = luaL_checkinteger(L, 7);
+    lua_Integer mode = luaL_optinteger(L, 7, None);
     lua_Integer rotation = luaL_checkinteger(L, 8);
     luaL_checktype(L, 9, LUA_TTABLE);
     int noutputs = lua_rawlen(L, 9);

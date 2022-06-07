@@ -232,7 +232,8 @@ int xrandr_get_crtc_info(lua_State*);
  * @tparam number timestamp
  * @tparam number x
  * @tparam number y
- * @tparam number mode The id of the @{XRRMode} to set for this CRTC.
+ * @tparam number|nil mode The id of the @{XRRMode} to set for this CRTC. If `0` or `nil` is passed,
+ *   the CRTC will be disabled.
  * @tparam number rotation
  * @tparam table<number> outputs The list of output XIDs to assign to this CRTC.
  * @treturn number An X11 `Status`.
