@@ -26,8 +26,8 @@ else
 INSTALL_DOCDIR ?= $(PREFIX)/share/doc/$(PROJECT)
 endif
 
-CC = gcc
-PKG_CONFIG ?= $(shell command -v pkg-config)
+CC ?= gcc
+PKG_CONFIG ?= pkg-config
 
 PKGS = x11 xrandr lua$(LUA_VERSION)
 
@@ -37,15 +37,13 @@ LIBFLAG ?= -shared
 CCFLAGS ?= $(CFLAGS)
 CCFLAGS += -Og -Wall -g -rdynamic $(shell $(PKG_CONFIG) --cflags $(PKGS)) -I$(LUA_INCDIR) -I"./"
 
-LIBS = -L$(shell dirname "$(shell $(CC) -print-libgcc-file-name)") -L"$(LUA_LIBDIR)" -L"./"
-LIBS += $(shell $(PKG_CONFIG) --libs $(PKGS))
-OBJS = $(shell find src -type f -iname '*.c' | sed 's/\(.*\)\.c$$/$(BUILD_DIR)\/\1\.o/')
-
-TARGET = $(BUILD_DIR)/$(PROJECT).so
-
 ifdef CI
 CHECK_ARGS ?= --formatter TAP
 TEST_ARGS ?= --output=TAP
+
+# In CI, not all packages are available with `.pc`s.
+# They are handled specially.
+PKGS = x11 xrandr
 
 CCFLAGS += -Werror
 endif
@@ -56,6 +54,12 @@ CCFLAGS += -O2 -DNDEBUG
 else
 CCFLAGS += -DLUA_USE_APICHECK
 endif
+
+LIBS = -L$(shell dirname "$(shell $(CC) -print-libgcc-file-name)") -L"$(LUA_LIBDIR)" -L"./"
+LIBS += $(shell $(PKG_CONFIG) --libs $(PKGS))
+OBJS = $(shell find src -type f -iname '*.c' | sed 's/\(.*\)\.c$$/$(BUILD_DIR)\/\1\.o/')
+
+TARGET = $(BUILD_DIR)/$(PROJECT).so
 
 .PHONY: clean doc doc-content doc-styles install test check rock
 
@@ -91,7 +95,7 @@ clean:
 
 install: build doc
 	@echo "\033[1;97mInstall C library\033[0m"
-	xargs install -vDm 644 -t $(INSTALL_LIBDIR)/$(PROJECT) $(TARGET)
+	install -vDm 644 -t $(INSTALL_LIBDIR)/$(PROJECT) $(TARGET)
 
 	@echo "\033[1;97mInstall documentation\033[0m"
 	install -vd $(INSTALL_DOCDIR)
