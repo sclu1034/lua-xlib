@@ -6,6 +6,7 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/randr.h>
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 
 void modeflags_to_lua(lua_State* L, int flags) {
@@ -218,46 +219,84 @@ int xrandr_get_crtc_info(lua_State* L) {
 }
 
 int crtc_info__gc(lua_State* L) {
-    crtc_info_t* res = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
-    XRRFreeCrtcInfo(res->inner);
+    crtc_info_t* crtc = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
+    XRRFreeCrtcInfo(crtc->inner);
     return 0;
 }
 
 int crtc_info__index(lua_State* L) {
-    crtc_info_t* res = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
+    crtc_info_t* crtc = luaL_checkudata(L, 1, LUA_XRANDR_CRTC_INFO);
     const char* key = luaL_checkstring(L, 2);
 
     if (strcmp(key, "timestamp") == 0) {
-        lua_pushinteger(L, res->inner->timestamp);
+        lua_pushinteger(L, crtc->inner->timestamp);
     } else if (strcmp(key, "x") == 0) {
-        lua_pushinteger(L, res->inner->x);
+        lua_pushinteger(L, crtc->inner->x);
     } else if (strcmp(key, "y") == 0) {
-        lua_pushinteger(L, res->inner->y);
+        lua_pushinteger(L, crtc->inner->y);
     } else if (strcmp(key, "height") == 0) {
-        lua_pushinteger(L, res->inner->height);
+        lua_pushinteger(L, crtc->inner->height);
     } else if (strcmp(key, "width") == 0) {
-        lua_pushinteger(L, res->inner->width);
+        lua_pushinteger(L, crtc->inner->width);
     } else if (strcmp(key, "mode") == 0) {
-        lua_pushinteger(L, res->inner->mode);
+        lua_pushinteger(L, crtc->inner->mode);
     } else if (strcmp(key, "rotation") == 0) {
-        lua_pushinteger(L, res->inner->rotation);
+        lua_pushinteger(L, crtc->inner->rotation);
     } else if (strcmp(key, "rotations") == 0) {
-        lua_pushinteger(L, res->inner->rotations);
+        lua_pushinteger(L, crtc->inner->rotations);
     } else if (strcmp(key, "outputs") == 0) {
-        lua_createtable(L, 0, res->inner->noutput);
-        for (int i = 0; i < res->inner->noutput; ++i) {
-            lua_pushinteger(L, res->inner->outputs[i]);
+        lua_createtable(L, 0, crtc->inner->noutput);
+        for (int i = 0; i < crtc->inner->noutput; ++i) {
+            lua_pushinteger(L, crtc->inner->outputs[i]);
             lua_rawseti(L, -2, i + 1);
         }
     } else if (strcmp(key, "possible") == 0) {
-        lua_createtable(L, 0, res->inner->npossible);
-        for (int i = 0; i < res->inner->npossible; ++i) {
-            lua_pushinteger(L, res->inner->possible[i]);
+        lua_createtable(L, 0, crtc->inner->npossible);
+        for (int i = 0; i < crtc->inner->npossible; ++i) {
+            lua_pushinteger(L, crtc->inner->possible[i]);
             lua_rawseti(L, -2, i + 1);
         }
     } else {
         lua_pushnil(L);
     }
+
+    return 1;
+}
+
+int xrandr_set_crtc_config(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    screen_resources_t* res = luaL_checkudata(L, 2, LUA_XRANDR_SCREEN_RESOURCES);
+    lua_Integer crtc = luaL_checkinteger(L, 3);
+    lua_Integer timestamp = luaL_checkinteger(L, 4);
+    lua_Integer x = luaL_checkinteger(L, 5);
+    lua_Integer y = luaL_checkinteger(L, 6);
+    lua_Integer mode = luaL_checkinteger(L, 7);
+    lua_Integer rotation = luaL_checkinteger(L, 8);
+    luaL_checktype(L, 9, LUA_TTABLE);
+    int noutputs = lua_rawlen(L, 9);
+    RROutput* outputs = (RROutput*) calloc(noutputs, sizeof(RROutput));
+    if (!outputs) {
+        return luaL_error(L, "failed to allocate outputs array");
+    }
+
+    for (int i = 0; i < noutputs; ++i) {
+        lua_rawgeti(L, 9, i + 1);
+        outputs[i] = luaL_checkinteger(L, -1);
+    }
+
+    Status status = XRRSetCrtcConfig(display->inner,
+                                     res->inner,
+                                     (RRCrtc) crtc,
+                                     (Time) timestamp,
+                                     (int) x,
+                                     (int) y,
+                                     (RRMode) mode,
+                                     (Rotation) rotation,
+                                     outputs,
+                                     noutputs);
+
+    free(outputs);
+    lua_pushinteger(L, status);
 
     return 1;
 }

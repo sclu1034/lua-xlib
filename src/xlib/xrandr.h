@@ -160,6 +160,7 @@ typedef struct {
 int crtc_info__gc(lua_State*);
 int crtc_info__index(lua_State*);
 int xrandr_get_crtc_info(lua_State*);
+int xrandr_set_crtc_config(lua_State*);
 
 
 static const struct luaL_Reg crtc_info_mt[] = {
@@ -174,6 +175,7 @@ static const struct luaL_Reg xrandr_lib[] = {
     { "XRRGetOutputInfo",     xrandr_get_output_info     },
     { "XRRGetOutputPrimary",  xrandr_get_output_primary  },
     { "XRRGetCrtcInfo",       xrandr_get_crtc_info       },
+    { "XRRSetCrtcConfig",     xrandr_set_crtc_config     },
     { "XRRSetOutputPrimary",  xrandr_set_output_primary  },
     { NULL,                   NULL                       }
 };

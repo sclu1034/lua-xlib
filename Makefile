@@ -53,6 +53,8 @@ endif
 # Override debug-optimized build with performance optimization
 ifeq "$(PROFILE)" "release"
 CCFLAGS += -O2 -DNDEBUG
+else
+CCFLAGS += -DLUA_USE_APICHECK
 endif
 
 .PHONY: clean doc doc-content doc-styles install test check rock
