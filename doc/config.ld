@@ -2,6 +2,10 @@ project = 'lua-xlib'
 title = 'lua-xlib'
 description = "Lua bindings for XLib and XRandR"
 
+topics = {
+    'doc/pages/randr.md',
+}
+
 template = true
 
 format = 'discount'
