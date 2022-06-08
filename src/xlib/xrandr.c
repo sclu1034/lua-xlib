@@ -453,6 +453,37 @@ int xrandr_set_screen_config_rate(lua_State* L) {
     return 1;
 }
 
+int get_mask_for_field(lua_State* L, int idx, const char* field, int mask) {
+    lua_getfield(L, idx, field);
+    Bool value = lua_toboolean(L, -1);
+    lua_pop(L, 1);
+
+    if (value) {
+        return mask;
+    } else {
+        return 0;
+    }
+}
+
+int xrandr_select_input(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    Window window = (Window) luaL_checkinteger(L, 2);
+    luaL_checktype(L, 3, LUA_TTABLE);
+
+    int mask = 0;
+    mask += get_mask_for_field(L, 3, "screen", RRScreenChangeNotifyMask);
+    mask += get_mask_for_field(L, 3, "crtc", RRCrtcChangeNotifyMask);
+    mask += get_mask_for_field(L, 3, "output", RROutputChangeNotifyMask);
+    mask += get_mask_for_field(L, 3, "output_property", RROutputPropertyNotifyMask);
+    mask += get_mask_for_field(L, 3, "provider", RRProviderChangeNotifyMask);
+    mask += get_mask_for_field(L, 3, "provider_property", RROutputPropertyNotifyMask);
+    mask += get_mask_for_field(L, 3, "resource", RRResourceChangeNotifyMask);
+
+    XRRSelectInput(display->inner, window, mask);
+
+    return 0;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);

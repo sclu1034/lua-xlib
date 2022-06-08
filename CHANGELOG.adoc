@@ -12,6 +12,7 @@
 * `xrandr.XRRQueryExtension()`
 * `xlib.XLockDisplay()` & `xlib.XUnlockDisplay()`
 * functions around `XRRScreenConfiguration`
+* `xrandr.XRRSelectInput`
 
 == v0.1.1 - 2022-06-08
 

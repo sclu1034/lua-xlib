@@ -396,6 +396,25 @@ static const struct luaL_Reg crtc_info_mt[] = {
     { NULL,      NULL            }
 };
 
+/** Configures which types of events the X server should enable.
+ *
+ * @function XRRSelectInput
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number window
+ * @tparam table mask
+ * @tparam boolean mask.screen Configure screen change notifications.
+ * @tparam boolean mask.crtc Configure crtc change notifications.
+ * @tparam boolean mask.output Configure output change notifications.
+ * @tparam boolean mask.output_property Configure output property change notifications.
+ * @tparam boolean mask.provider Configure provider change notifications.
+ * @tparam boolean mask.provider_property Configure provider property change notifications.
+ * @tparam boolean mask.resource Configure resource change notifications.
+ * @usage
+ * -- Enable notifications for CRTCs and outputs
+ * xrandr.XRRSelectInput(display, root, { crtc = true, output = true })
+ */
+int xrandr_select_input(lua_State* L);
+
 
 static const struct luaL_Reg xrandr_lib[] = {
     {"XRRQueryVersion",                xrandr_query_version               },
