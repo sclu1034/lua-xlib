@@ -325,6 +325,134 @@ int xrandr_query_extension(lua_State* L) {
     return 3;
 }
 
+int screen_configuration__gc(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    XRRFreeScreenConfigInfo(config->inner);
+    return 0;
+}
+
+int xrandr_get_screen_info(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    Window window = luaL_checkinteger(L, 2);
+
+    screen_configuration_t* config = lua_newuserdata(L, sizeof(screen_configuration_t));
+    luaL_getmetatable(L, LUA_XRANDR_SCREEN_CONFIG);
+    lua_setmetatable(L, -2);
+
+    XRRScreenConfiguration* inner = XRRGetScreenInfo(display->inner, window);
+    if (!inner) {
+        return luaL_error(L, "failed to get screen configuration");
+    }
+
+    config->inner = inner;
+
+    return 1;
+}
+
+int xrandr_config_rotations(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    Rotation current_rotation;
+    Rotation rotation = XRRConfigRotations(config->inner, &current_rotation);
+    lua_pushinteger(L, rotation);
+    lua_pushinteger(L, current_rotation);
+    return 2;
+}
+
+int xrandr_config_times(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    Time config_timestamp;
+    Time timestamp = XRRConfigTimes(config->inner, &config_timestamp);
+    lua_pushinteger(L, timestamp);
+    lua_pushinteger(L, config_timestamp);
+    return 2;
+}
+
+int xrandr_config_sizes(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    int nsizes;
+    XRRScreenSize* sizes = XRRConfigSizes(config->inner, &nsizes);
+
+    lua_createtable(L, 0, nsizes);
+    for (int i = 0; i < nsizes; ++i) {
+        XRRScreenSize size = sizes[i];
+        lua_createtable(L, 4, 0);
+
+        lua_pushinteger(L, size.width);
+        lua_setfield(L, -2, "width");
+
+        lua_pushinteger(L, size.mwidth);
+        lua_setfield(L, -2, "mwidth");
+
+        lua_pushinteger(L, size.height);
+        lua_setfield(L, -2, "height");
+
+        lua_pushinteger(L, size.mheight);
+        lua_setfield(L, -2, "mheight");
+
+        lua_rawseti(L, -2, i + 1);
+    }
+
+    return 1;
+}
+
+int xrandr_config_rates(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    lua_Integer size_index = luaL_checkinteger(L, 2);
+    int nrates;
+    short* rates = XRRConfigRates(config->inner, (SizeID) size_index, &nrates);
+
+    lua_createtable(L, 0, nrates);
+    for (int i = 0; i < nrates; ++i) {
+        lua_pushinteger(L, rates[i]);
+        lua_rawseti(L, -2, i + 1);
+    }
+    return 1;
+}
+
+int xrandr_config_current_configuration(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    Rotation rotation;
+    SizeID size_index = XRRConfigCurrentConfiguration(config->inner, &rotation);
+    lua_pushinteger(L, size_index);
+    lua_pushinteger(L, rotation);
+    return 2;
+}
+
+int xrandr_config_current_rate(lua_State* L) {
+    screen_configuration_t* config = luaL_checkudata(L, 1, LUA_XRANDR_SCREEN_CONFIG);
+    lua_pushinteger(L, XRRConfigCurrentRate(config->inner));
+    return 1;
+}
+
+int xrandr_set_screen_config(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    screen_configuration_t* config = luaL_checkudata(L, 2, LUA_XRANDR_SCREEN_CONFIG);
+    Drawable d = (Drawable) luaL_checkinteger(L, 3);
+    int size_index = (int) luaL_checkinteger(L, 4);
+    Rotation rotation = (Rotation) luaL_checkinteger(L, 5);
+    Time timestamp = (Time) luaL_checkinteger(L, 6);
+
+    Status status = XRRSetScreenConfig(display->inner, config->inner, d, size_index, rotation, timestamp);
+
+    lua_pushinteger(L, status);
+    return 1;
+}
+
+int xrandr_set_screen_config_rate(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    screen_configuration_t* config = luaL_checkudata(L, 2, LUA_XRANDR_SCREEN_CONFIG);
+    Drawable d = (Drawable) luaL_checkinteger(L, 3);
+    int size_index = (int) luaL_checkinteger(L, 4);
+    Rotation rotation = (Rotation) luaL_checkinteger(L, 5);
+    short rate = (short) luaL_checkinteger(L, 6);
+    Time timestamp = (Time) luaL_checkinteger(L, 7);
+
+    Status status = XRRSetScreenConfigAndRate(display->inner, config->inner, d, size_index, rotation, rate, timestamp);
+
+    lua_pushinteger(L, status);
+    return 1;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);
@@ -335,6 +463,9 @@ LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
 
     luaL_newmetatable(L, LUA_XRANDR_CRTC_INFO);
     luaL_setfuncs(L, crtc_info_mt, 0);
+
+    luaL_newmetatable(L, LUA_XRANDR_SCREEN_CONFIG);
+    luaL_setfuncs(L, screen_config_mt, 0);
 
     luaL_newmetatable(L, LUA_XRANDR);
 

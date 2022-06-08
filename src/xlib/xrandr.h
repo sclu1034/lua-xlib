@@ -19,6 +19,7 @@
 #define LUA_XRANDR_SCREEN_RESOURCES "xlib.xrandr.screen_resources"
 #define LUA_XRANDR_OUTPUT_INFO      "xlib.xrandr.output_info"
 #define LUA_XRANDR_CRTC_INFO        "xlib.xrandr.crtc_info"
+#define LUA_XRANDR_SCREEN_CONFIG    "xlib.xrandr.screen_configuration"
 
 // Enums as defined in https://cgit.freedesktop.org/xorg/proto/randrproto/tree/randrproto.txt
 
@@ -64,6 +65,114 @@ int xrandr_query_version(lua_State*);
  */
 int xrandr_query_extension(lua_State*);
 
+
+/**
+ * @table XRRScreenConfiguration
+ */
+typedef struct {
+    XRRScreenConfiguration* inner;
+} screen_configuration_t;
+
+int screen_configuration__gc(lua_State*);
+
+static const struct luaL_Reg screen_config_mt[] = {
+    {"__gc", screen_configuration__gc},
+    { NULL,  NULL                    }
+};
+
+/** Queries the screen configuration.
+ *
+ * @function XRRGetScreenInfo
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number window
+ * @treturn XRRScreenConfiguration
+ * @usage
+ * local display = xlib.xlib.XOpenDisplay()
+ * local screen = xlib.DefaultScreen(display)
+ * local root = xlib.RootWindow(display, screen)
+ * local info = xrandr.XRRGetScreenInfo(display, root)
+ */
+int xrandr_get_screen_info(lua_State*);
+
+/** Updates the screen configuration.
+ *
+ * @function XRRSetScreenConfig
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam XRRScreenConfiguration config
+ * @tparam Drawable draw
+ * @tparam integer size_index
+ * @tparam number rotation
+ * @tparam number timestamp
+ * @treturn number
+ */
+int xrandr_set_screen_config(lua_State*);
+
+/** Updates the screen configuration.
+ *
+ * @function XRRSetScreenConfigAndRate
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam XRRScreenConfiguration config
+ * @tparam Drawable draw
+ * @tparam integer size_index
+ * @tparam number rotation
+ * @tparam integer rate
+ * @tparam number timestamp
+ * @treturn number
+ */
+int xrandr_set_screen_config_rate(lua_State*);
+
+
+/** Gets the rotations from a screen config.
+ *
+ * @function XRRConfigRotations
+ * @tparam XRRScreenConfiguration config
+ * @treturn number `rotations`
+ * @treturn number `current_rotation`
+ */
+int xrandr_config_rotations(lua_State*);
+
+/** Gets the timestamps from a screen config.
+ *
+ * @function XRRConfigTimes
+ * @tparam XRRScreenConfiguration config
+ * @treturn number `timestamp`
+ * @treturn number `config_timestamp`
+ */
+int xrandr_config_times(lua_State*);
+
+/** Gets the list of sizes from a screen config.
+ *
+ * @function XRRConfigSizes
+ * @tparam XRRScreenConfiguration config
+ * @treturn table
+ */
+int xrandr_config_sizes(lua_State*);
+
+/** Gets the list or refresh rates from a screen config.
+ *
+ * @function XRRConfigRates
+ * @tparam XRRScreenConfiguration config
+ * @tparam number size_index Index of the current screen size from @{XRRConfigCurrentConfiguration}.
+ * @treturn table
+ */
+int xrandr_config_rates(lua_State*);
+
+/** Gets the current size index and rotation from a screen config.
+ *
+ * @function XRRConfigCurrentConfiguration
+ * @tparam XRRScreenConfiguration config
+ * @treturn number Index into the return value of @{XRRConfigSizes}
+ * @treturn number Current rotation
+ */
+int xrandr_config_current_configuration(lua_State*);
+
+/** Gets the current refresh rate from a screen config.
+ *
+ * @function XRRConfigCurrentRate
+ * @tparam XRRScreenConfiguration config
+ * @treturn number
+ */
+int xrandr_config_current_rate(lua_State*);
 
 /**
  * This table maps the bitfield to individual booleans.
@@ -289,15 +398,24 @@ static const struct luaL_Reg crtc_info_mt[] = {
 
 
 static const struct luaL_Reg xrandr_lib[] = {
-    {"XRRQueryVersion",        xrandr_query_version       },
-    { "XRRQueryExtension",     xrandr_query_extension     },
-    { "XRRGetScreenResources", xrandr_get_screen_resources},
-    { "XRRGetOutputInfo",      xrandr_get_output_info     },
-    { "XRRGetOutputPrimary",   xrandr_get_output_primary  },
-    { "XRRGetCrtcInfo",        xrandr_get_crtc_info       },
-    { "XRRSetCrtcConfig",      xrandr_set_crtc_config     },
-    { "XRRSetOutputPrimary",   xrandr_set_output_primary  },
-    { NULL,                    NULL                       }
+    {"XRRQueryVersion",                xrandr_query_version               },
+    { "XRRQueryExtension",             xrandr_query_extension             },
+    { "XRRGetScreenResources",         xrandr_get_screen_resources        },
+    { "XRRGetOutputInfo",              xrandr_get_output_info             },
+    { "XRRGetOutputPrimary",           xrandr_get_output_primary          },
+    { "XRRGetCrtcInfo",                xrandr_get_crtc_info               },
+    { "XRRSetCrtcConfig",              xrandr_set_crtc_config             },
+    { "XRRSetOutputPrimary",           xrandr_set_output_primary          },
+    { "XRRGetScreenInfo",              xrandr_get_screen_info             },
+    { "XRRSetScreenConfig",            xrandr_set_screen_config           },
+    { "XRRSetScreenConfigAndRate",     xrandr_set_screen_config_rate      },
+    { "XRRConfigRotations",            xrandr_config_rotations            },
+    { "XRRConfigTimes",                xrandr_config_times                },
+    { "XRRConfigSizes",                xrandr_config_sizes                },
+    { "XRRConfigRates",                xrandr_config_rates                },
+    { "XRRConfigCurrentConfiguration", xrandr_config_current_configuration},
+    { "XRRConfigCurrentRate",          xrandr_config_current_rate         },
+    { NULL,                            NULL                               }
 };
 
 #endif // xrandr_h_INCLUDED
