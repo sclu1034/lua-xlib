@@ -4,6 +4,12 @@
 :idprefix:
 :idseparator: -
 
+== [Unreleased]
+
+== Added
+
+* `xrandr.XRRQueryVersion`
+
 == v0.1.1 - 2022-06-08
 
 === Fixed

@@ -263,14 +263,30 @@ static const struct luaL_Reg crtc_info_mt[] = {
 };
 
 
+/** Queries the maximum supported extension version from the server.
+ *
+ * The return values of the major and minor extension version are only defined when
+ * the status value is `1`. In all other cases, using the version numbers is considered
+ * undefined behaviour.
+ *
+ * @function XRRQueryVersion
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @treturn number The request status.
+ * @treturn[opt] number The major extension version.
+ * @treturn[opt] number The minor extension version.
+ */
+int xrandr_query_version(lua_State*);
+
+
 static const struct luaL_Reg xrandr_lib[] = {
-    {"XRRGetScreenResources", xrandr_get_screen_resources},
-    { "XRRGetOutputInfo",     xrandr_get_output_info     },
-    { "XRRGetOutputPrimary",  xrandr_get_output_primary  },
-    { "XRRGetCrtcInfo",       xrandr_get_crtc_info       },
-    { "XRRSetCrtcConfig",     xrandr_set_crtc_config     },
-    { "XRRSetOutputPrimary",  xrandr_set_output_primary  },
-    { NULL,                   NULL                       }
+    {"XRRQueryVersion",        xrandr_query_version       },
+    { "XRRGetScreenResources", xrandr_get_screen_resources},
+    { "XRRGetOutputInfo",      xrandr_get_output_info     },
+    { "XRRGetOutputPrimary",   xrandr_get_output_primary  },
+    { "XRRGetCrtcInfo",        xrandr_get_crtc_info       },
+    { "XRRSetCrtcConfig",      xrandr_set_crtc_config     },
+    { "XRRSetOutputPrimary",   xrandr_set_output_primary  },
+    { NULL,                    NULL                       }
 };
 
 #endif // xrandr_h_INCLUDED

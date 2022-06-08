@@ -301,6 +301,18 @@ int xrandr_set_crtc_config(lua_State* L) {
     return 1;
 }
 
+int xrandr_query_version(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    int major = 0;
+    int minor = 0;
+
+    Status status = XRRQueryVersion(display->inner, &major, &minor);
+    lua_pushinteger(L, status);
+    lua_pushinteger(L, major);
+    lua_pushinteger(L, minor);
+    return 3;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);
