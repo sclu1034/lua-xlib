@@ -91,6 +91,23 @@ int xlib_root_window(lua_State*);
  */
 int xlib_screen_count(lua_State*);
 
+/** Locks the given display connection for use with the current thread only.
+ *
+ * Other threads attempting to use the same connection will block until it is unlocked with @{XUnlockDisplay}.
+ * Calls to this function may be nested.
+ *
+ * @function XLockDisplay
+ * @tparam Display display
+ */
+int xlib_lock_display(lua_State*);
+
+/** Releases a lock from the given display connection.
+ *
+ * @function XUnlockDisplay
+ * @tparam Display display
+ */
+int xlib_unlock_display(lua_State*);
+
 
 static const struct luaL_Reg display_mt[] = {
     {"__gc", display__gc},
@@ -98,14 +115,16 @@ static const struct luaL_Reg display_mt[] = {
 };
 
 static const struct luaL_Reg xlib_lib[] = {
-    {"DefaultScreen",  xlib_default_screen},
-    { "DisplayHeight", xlib_display_height},
-    { "DisplayWidth",  xlib_display_width },
-    { "RootWindow",    xlib_root_window   },
-    { "ScreenCount",   xlib_screen_count  },
-    { "XDisplayName",  xlib_display_name  },
-    { "XOpenDisplay",  xlib_open_display  },
-    { NULL,            NULL               }
+    {"DefaultScreen",   xlib_default_screen},
+    { "DisplayHeight",  xlib_display_height},
+    { "DisplayWidth",   xlib_display_width },
+    { "RootWindow",     xlib_root_window   },
+    { "ScreenCount",    xlib_screen_count  },
+    { "XDisplayName",   xlib_display_name  },
+    { "XOpenDisplay",   xlib_open_display  },
+    { "XLockDisplay",   xlib_lock_display  },
+    { "XUnlockDisplay", xlib_unlock_display},
+    { NULL,             NULL               }
 };
 
 #endif // xlib_h_INCLUDED

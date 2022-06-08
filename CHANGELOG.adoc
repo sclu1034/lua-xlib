@@ -10,6 +10,7 @@
 
 * `xrandr.XRRQueryVersion`
 * `xrandr.XRRQueryExtension`
+* `xlib.XLockDisplay` & `xlib.XUnlockDisplay`
 
 == v0.1.1 - 2022-06-08
 

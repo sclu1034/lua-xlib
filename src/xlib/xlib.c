@@ -64,6 +64,18 @@ int xlib_display_width(lua_State* L) {
     return 1;
 }
 
+int xlib_lock_display(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    XLockDisplay(display->inner);
+    return 0;
+}
+
+int xlib_unlock_display(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    XUnlockDisplay(display->inner);
+    return 0;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib(lua_State* L) {
     luaL_newmetatable(L, LUA_XLIB_DISPLAY);
