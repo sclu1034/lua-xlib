@@ -112,7 +112,7 @@ test:
 	busted --config-file=.busted.lua --lua=$(LUA) $(TEST_ARGS)
 
 rock:
-	luarocks --local --lua-version $(LUA_VERSION) make rocks/lua-xlib-scm-1.rockspec
+	luarocks --local --lua-version $(LUA_VERSION) make rocks/lua-xlib-scm-2.rockspec
 
 run: build
 	env LUA_CPATH="./out/?.so;$${LUA_CPATH}" $(LUA) test.lua
