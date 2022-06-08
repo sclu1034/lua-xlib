@@ -68,6 +68,9 @@ int xrandr_query_extension(lua_State*);
 
 /**
  * @table XRRScreenConfiguration
+ *
+ * This only functions as a marker. Values need to be retrieved through the `XRRConfig*` functions, such as
+ * @{XRRConfigCurrentRate}.
  */
 typedef struct {
     XRRScreenConfiguration* inner;
