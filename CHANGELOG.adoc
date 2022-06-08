@@ -9,6 +9,7 @@
 == Added
 
 * `xrandr.XRRQueryVersion`
+* `xrandr.XRRQueryExtension`
 
 == v0.1.1 - 2022-06-08
 
@@ -22,5 +23,3 @@
 
 * initial release
 * implemented necessary function bindings to be able to change CRTC modes
-
-== [Unreleased]

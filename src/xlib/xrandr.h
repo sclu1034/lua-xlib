@@ -277,9 +277,20 @@ static const struct luaL_Reg crtc_info_mt[] = {
  */
 int xrandr_query_version(lua_State*);
 
+/** Returns the base event codes.
+ *
+ * @function XRRQueryExtension
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @treturn boolean
+ * @treturn[opt] number The event base code
+ * @treturn[opt] number The error base code
+ */
+int xrandr_query_extension(lua_State*);
+
 
 static const struct luaL_Reg xrandr_lib[] = {
     {"XRRQueryVersion",        xrandr_query_version       },
+    { "XRRQueryExtension",     xrandr_query_extension     },
     { "XRRGetScreenResources", xrandr_get_screen_resources},
     { "XRRGetOutputInfo",      xrandr_get_output_info     },
     { "XRRGetOutputPrimary",   xrandr_get_output_primary  },

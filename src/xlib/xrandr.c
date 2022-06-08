@@ -313,6 +313,18 @@ int xrandr_query_version(lua_State* L) {
     return 3;
 }
 
+int xrandr_query_extension(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    int event_base = 0;
+    int error_base = 0;
+
+    Bool status = XRRQueryExtension(display->inner, &event_base, &error_base);
+    lua_pushboolean(L, status);
+    lua_pushinteger(L, event_base);
+    lua_pushinteger(L, error_base);
+    return 3;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);
