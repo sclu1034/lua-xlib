@@ -40,6 +40,31 @@ static const char* mode_flags[14] = {
 };
 
 
+/** Queries the maximum supported extension version from the server.
+ *
+ * The return values of the major and minor extension version are only defined when
+ * the status value is `1`. In all other cases, using the version numbers is considered
+ * undefined behaviour.
+ *
+ * @function XRRQueryVersion
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @treturn number The request status.
+ * @treturn[opt] number The major extension version.
+ * @treturn[opt] number The minor extension version.
+ */
+int xrandr_query_version(lua_State*);
+
+/** Returns the base event codes.
+ *
+ * @function XRRQueryExtension
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @treturn boolean
+ * @treturn[opt] number The event base code
+ * @treturn[opt] number The error base code
+ */
+int xrandr_query_extension(lua_State*);
+
+
 /**
  * This table maps the bitfield to individual booleans.
  *
@@ -261,31 +286,6 @@ static const struct luaL_Reg crtc_info_mt[] = {
     { "__index", crtc_info__index},
     { NULL,      NULL            }
 };
-
-
-/** Queries the maximum supported extension version from the server.
- *
- * The return values of the major and minor extension version are only defined when
- * the status value is `1`. In all other cases, using the version numbers is considered
- * undefined behaviour.
- *
- * @function XRRQueryVersion
- * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
- * @treturn number The request status.
- * @treturn[opt] number The major extension version.
- * @treturn[opt] number The minor extension version.
- */
-int xrandr_query_version(lua_State*);
-
-/** Returns the base event codes.
- *
- * @function XRRQueryExtension
- * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
- * @treturn boolean
- * @treturn[opt] number The event base code
- * @treturn[opt] number The error base code
- */
-int xrandr_query_extension(lua_State*);
 
 
 static const struct luaL_Reg xrandr_lib[] = {
