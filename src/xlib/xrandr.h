@@ -434,6 +434,21 @@ int xrandr_select_input(lua_State* L);
 int xrandr_get_screen_size_range(lua_State*);
 
 
+/** Sets the screen size.
+ *
+ * The `width` and `height` must be within the ranges returned by @{XRRGetScreenSizeRange}.
+ *
+ * @function XRRSetScreenSize
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number window
+ * @tparam number width
+ * @tparam number height
+ * @tparam number mm_width Physical size of the screen, in millimeters.
+ * @tparam number mm_height Physical size of the screen, in millimeters.
+ */
+int xrandr_set_screen_size(lua_State*);
+
+
 static const struct luaL_Reg xrandr_lib[] = {
     {"XRRQueryVersion",                xrandr_query_version               },
     { "XRRQueryExtension",             xrandr_query_extension             },
@@ -453,6 +468,7 @@ static const struct luaL_Reg xrandr_lib[] = {
     { "XRRConfigCurrentConfiguration", xrandr_config_current_configuration},
     { "XRRConfigCurrentRate",          xrandr_config_current_rate         },
     { "XRRGetScreenSizeRange",         xrandr_get_screen_size_range       },
+    { "XRRSetScreenSize",              xrandr_set_screen_size             },
     { NULL,                            NULL                               }
 };
 
