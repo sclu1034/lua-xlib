@@ -13,6 +13,7 @@
 * `xlib.XLockDisplay()` & `xlib.XUnlockDisplay()`
 * functions around `XRRScreenConfiguration`
 * `xrandr.XRRSelectInput`
+* `xrandr.XRRGetScreenSizeRange`
 
 == v0.1.1 - 2022-06-08
 

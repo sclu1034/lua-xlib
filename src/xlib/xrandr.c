@@ -484,6 +484,25 @@ int xrandr_select_input(lua_State* L) {
     return 0;
 }
 
+int xrandr_get_screen_size_range(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    Window window = (Window) luaL_checkinteger(L, 2);
+    int min_width;
+    int min_height;
+    int max_width;
+    int max_height;
+
+    Status status = XRRGetScreenSizeRange(display->inner, window, &min_width, &min_height, &max_width, &max_height);
+
+    lua_pushinteger(L, status);
+    lua_pushinteger(L, min_width);
+    lua_pushinteger(L, min_height);
+    lua_pushinteger(L, max_width);
+    lua_pushinteger(L, max_height);
+
+    return 5;
+}
+
 
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);

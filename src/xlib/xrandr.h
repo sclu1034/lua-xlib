@@ -418,6 +418,21 @@ static const struct luaL_Reg crtc_info_mt[] = {
  */
 int xrandr_select_input(lua_State* L);
 
+/** Gets the range of possible screen sizes.
+ *
+ * This returns the minimum and maximum boundaries within which screen sizes may be set.
+ *
+ * @function XRRGetScreenSizeRange
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number window
+ * @treturn number status Despite being designated a X11 `Status` in `Xrandr.h`, this returns `1` on success.
+ * @treturn number min_width
+ * @treturn number min_height
+ * @treturn number max_width
+ * @treturn number max_height
+ */
+int xrandr_get_screen_size_range(lua_State*);
+
 
 static const struct luaL_Reg xrandr_lib[] = {
     {"XRRQueryVersion",                xrandr_query_version               },
@@ -437,6 +452,7 @@ static const struct luaL_Reg xrandr_lib[] = {
     { "XRRConfigRates",                xrandr_config_rates                },
     { "XRRConfigCurrentConfiguration", xrandr_config_current_configuration},
     { "XRRConfigCurrentRate",          xrandr_config_current_rate         },
+    { "XRRGetScreenSizeRange",         xrandr_get_screen_size_range       },
     { NULL,                            NULL                               }
 };
 
