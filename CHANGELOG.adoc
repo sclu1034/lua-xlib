@@ -14,6 +14,7 @@
 * functions around `XRRScreenConfiguration`
 * `xrandr.XRRSelectInput`
 * `xrandr.XRRGetScreenSizeRange` & `xrandr.XRRSetScreenSize`
+* `xlib.XCloseDisplay`
 
 == v0.1.1 - 2022-06-08
 

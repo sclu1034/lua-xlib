@@ -19,6 +19,7 @@
  */
 typedef struct {
     Display* inner;
+    Bool closed;
 } display_t;
 
 int display__gc(lua_State*);
@@ -63,7 +64,7 @@ int xlib_display_height(lua_State*);
  */
 int xlib_display_width(lua_State*);
 
-/** Open a connection to the given display.
+/** Opens a connection to the given display.
  *
  * The connection is closed automatically when the returned handler is garbage collected
  * (i.e. when it goes out of scope).
@@ -74,6 +75,13 @@ int xlib_display_width(lua_State*);
  * @treturn Display
  */
 int xlib_open_display(lua_State*);
+
+/** Closes a connection.
+ *
+ * @function XCloseDisplay
+ * @tparam Display display
+ */
+int xlib_close_display(lua_State*);
 
 /** Returns the root window for the given display.
  *
@@ -123,6 +131,7 @@ static const struct luaL_Reg xlib_lib[] = {
     { "XDisplayName",   xlib_display_name  },
     { "XOpenDisplay",   xlib_open_display  },
     { "XLockDisplay",   xlib_lock_display  },
+    { "XCloseDisplay",  xlib_close_display },
     { "XUnlockDisplay", xlib_unlock_display},
     { NULL,             NULL               }
 };

@@ -5,7 +5,11 @@
 
 int display__gc(lua_State* L) {
     display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
-    XCloseDisplay(display->inner);
+    // All we care about is that the connection has been closed somehow.
+    // So rather than failing, like `xlib_close_display`, we just silently ignore closed connections.
+    if (!display->closed) {
+        XCloseDisplay(display->inner);
+    }
     return 0;
 }
 
@@ -21,8 +25,18 @@ int xlib_open_display(lua_State* L) {
     lua_setmetatable(L, -2);
 
     d->inner = display;
+    d->closed = False;
 
     return 1;
+}
+
+int xlib_close_display(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    if (display->closed) {
+        return luaL_error(L, "this display connection has already been closed");
+    }
+    XCloseDisplay(display->inner);
+    return 0;
 }
 
 int xlib_display_name(lua_State* L) {
