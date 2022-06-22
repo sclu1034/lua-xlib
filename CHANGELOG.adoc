@@ -8,6 +8,7 @@
 
 == Added
 
+* tests
 * `xrandr.XRRQueryVersion()`
 * `xrandr.XRRQueryExtension()`
 * `xlib.XLockDisplay()` & `xlib.XUnlockDisplay()`

@@ -3,7 +3,7 @@ PREFIX ?= /usr/local
 BUILD_DIR = out
 
 LUA_VERSION ?= 5.1
-LUA ?= $(shell command -v lua$(LUA_VERSION))
+LUA ?= $(shell bash -c "command -v lua$(LUA_VERSION)")
 LUA_BINDIR ?= /usr/bin
 LUA_LIBDIR ?= /usr/lib/x86_64-linux-gnu/lua/$(LUA_VERSION)
 LUA_INCDIR ?= /usr/include/lua$(LUA_VERSION)
@@ -108,8 +108,8 @@ uninstall:
 check:
 	@echo "Nothing to do"
 
-test:
-	busted --config-file=.busted.lua --lua=$(LUA) $(TEST_ARGS)
+test: build
+	xvfb-run busted --config-file=.busted.lua --lua=$(LUA) $(TEST_ARGS)
 
 rock:
 	luarocks --local --lua-version $(LUA_VERSION) make rocks/lua-xlib-scm-2.rockspec
