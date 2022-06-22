@@ -70,7 +70,11 @@
                     </tr>
                     <tr>
                         <td class="name"><a href="#XOpenDisplay">XOpenDisplay([display_name])</a></td>
-                        <td class="summary">Open a connection to the given display.</td>
+                        <td class="summary">Opens a connection to the given display.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XCloseDisplay">XCloseDisplay(display)</a></td>
+                        <td class="summary">Closes a connection.</td>
                     </tr>
                     <tr>
                         <td class="name"><a href="#RootWindow">RootWindow(display)</a></td>
@@ -87,6 +91,22 @@
                     <tr>
                         <td class="name"><a href="#XUnlockDisplay">XUnlockDisplay(display)</a></td>
                         <td class="summary">Releases a lock from the given display connection.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XInternAtom">XInternAtom(display, name, only_if_exists)</a></td>
+                        <td class="summary">Returns an atom identifier for the given name.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XInternAtoms">XInternAtoms(display, names, only_if_exists)</a></td>
+                        <td class="summary">Returns the atom identifier for a list of names.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XGetAtomName">XGetAtomName(display, atom)</a></td>
+                        <td class="summary">Returns the name associated with the given atom.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XGetAtomNames">XGetAtomNames(display, atoms)</a></td>
+                        <td class="summary">Returns the names associated with the list of atoms.</td>
                     </tr>
                 </tbody>
             </table>
@@ -316,7 +336,7 @@
                         <strong>XOpenDisplay([display_name])</strong>
                     </div>
 
-                    <div class="block content section__item__description">Open a connection to the given display. </p>
+                    <div class="block content section__item__description">Opens a connection to the given display. </p>
 
 <p> The connection is closed automatically when the returned handler is garbage collected
  (i.e. when it goes out of scope).</div>
@@ -360,6 +380,33 @@
                                     </div>
                                 </div>
                             </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XCloseDisplay" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XCloseDisplay(display)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Closes a connection.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -504,6 +551,268 @@
                         </ul>
                     </div>
                 </div>
+                <div id="XInternAtom" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XInternAtom(display, name, only_if_exists)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns an atom identifier for the given name.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>name</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>only_if_exists</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">booolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XInternAtoms" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XInternAtoms(display, names, only_if_exists)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the atom identifier for a list of names.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>names</em></span>
+                                    <span class="parameter__description">:&nbsp; A list of strings.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>only_if_exists</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>An Xlib <code>Status</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XGetAtomName" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XGetAtomName(display, atom)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the name associated with the given atom.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>atom</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XGetAtomNames" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XGetAtomNames(display, atoms)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the names associated with the list of atoms.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="../modules/xlib.html#Display">Display</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>atoms</em></span>
+                                    <span class="parameter__description">:&nbsp; A list of numbers.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -527,7 +836,7 @@
 
 <footer class="footer">
     <div class="content has-text-centered">
-        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-08 14:34:42.
+        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-22 13:38:57.
     </div>
 </footer>
 
