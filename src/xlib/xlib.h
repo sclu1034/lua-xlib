@@ -116,6 +116,45 @@ int xlib_lock_display(lua_State*);
  */
 int xlib_unlock_display(lua_State*);
 
+/** Returns an atom identifier for the given name.
+ *
+ * @function XInternAtom
+ * @tparam Display display
+ * @tparam string name
+ * @tparam booolean only_if_exists
+ * @treturn number
+ */
+int xlib_intern_atom(lua_State*);
+
+/** Returns the atom identifier for a list of names.
+ *
+ * @function XInternAtoms
+ * @tparam Display display
+ * @tparam table names A list of strings.
+ * @tparam boolean only_if_exists
+ * @treturn number An Xlib `Status`.
+ * @treturn table
+ */
+int xlib_intern_atoms(lua_State*);
+
+/** Returns the name associated with the given atom.
+ *
+ * @function XGetAtomName
+ * @tparam Display display
+ * @tparam number atom An X11 `Atom`.
+ * @treturn string
+ */
+int xlib_get_atom_name(lua_State*);
+
+/** Returns the names associated with the list of atoms.
+ *
+ * @function XGetAtomNames
+ * @tparam Display display
+ * @tparam table atoms A list of numbers.
+ * @treturn table
+ */
+int xlib_get_atom_names(lua_State*);
+
 
 static const struct luaL_Reg display_mt[] = {
     {"__gc", display__gc},
@@ -133,6 +172,10 @@ static const struct luaL_Reg xlib_lib[] = {
     { "XLockDisplay",   xlib_lock_display  },
     { "XCloseDisplay",  xlib_close_display },
     { "XUnlockDisplay", xlib_unlock_display},
+    { "XInternAtom",    xlib_intern_atom   },
+    { "XInternAtoms",   xlib_intern_atoms  },
+    { "XGetAtomName",   xlib_get_atom_name },
+    { "XGetAtomNames",  xlib_get_atom_names},
     { NULL,             NULL               }
 };
 
