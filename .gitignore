@@ -1,4 +1,6 @@
 out/
+build/
+build.luarocks/
 
 .gdb_history
 .gdbinit

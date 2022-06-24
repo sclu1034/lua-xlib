@@ -11,75 +11,97 @@ env:
   DEBIAN: noninteractive
 
 jobs:
-  check:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: leafo/gh-actions-lua@v8.0.0
-      - uses: leafo/gh-actions-luarocks@v4.0.0
-
-      - name: Install LuaCheck
-        run: luarocks install luacheck
-
-      - name: Run checks
-        run: make check LUA_VERSION=${{ matrix.lua_version }}
-
   test:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        lua_version: ['5.1', '5.2', '5.3', '5.4', 'luajit']
+        lua_version: ['5.1.5', '5.2.4', '5.3.6', '5.4.4']
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: leafo/gh-actions-lua@v8.0.0
-        with:
-          luaVersion: ${{ matrix.lua_version }}
-      - uses: leafo/gh-actions-luarocks@v4.0.0
-
-      - name: Install Busted
-        run: luarocks install busted
-
       - name: Install dependencies
         shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libx11-dev libxrandr-dev
+          sudo apt-get install -y --no-install-recommends \
+            libx11-dev \
+            libxrandr-dev \
+            libreadline-dev
+
+      - name: Install Lua ${{ matrix.lua_version }}
+        shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
+        run: |
+          curl -R -O http://www.lua.org/ftp/lua-${{ matrix.lua_version }}.tar.gz
+          tar -xzf lua-${{ matrix.lua_version }}.tar.gz
+          cd lua-${{ matrix.lua_version }}/src
+          make -j$(nproc) all MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses" MYCFLAGS="-DLUA_USE_LINUX -DLUA_USE_READLINE -fPIC"
+          cd ..
+          sudo make install
+
+      - name: Install LuaRocks
+        run: |
+          wget https://luarocks.org/releases/luarocks-3.8.0.tar.gz
+          tar zxpf luarocks-3.8.0.tar.gz
+          cd luarocks-3.8.0
+          ./configure --with-lua-include=/usr/local/include
+          make -j$(nproc)
+          sudo make install
+
+      - uses: actions/checkout@v3.0.2
 
       - name: Build
-        run: make build
-
-      - name: Run tests
-        run: make test LUA_VERSION=${{ matrix.lua_version }}
+        run: |
+          cmake -S . -B build -DCI=ON
+          cd build
+          make -j$(nproc) xlib
 
   rock:
     runs-on: ubuntu-20.04
-    needs: [check, test]
+    needs: [test]
     strategy:
       fail-fast: false
       matrix:
-        lua_version: ['5.1', '5.2', '5.3', '5.4']
+        lua_version: ['5.1.5', '5.2.4', '5.3.6', '5.4.4']
     steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: leafo/gh-actions-lua@v8.0.0
-        with:
-          luaVersion: ${{ matrix.lua_version }}
-      - uses: leafo/gh-actions-luarocks@v4.0.0
+      - name: Install dependencies
+        shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libx11-dev \
+            libxrandr-dev \
+            libreadline-dev
+
+      - name: Install Lua ${{ matrix.lua_version }}
+        shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
+        if: matrix.lua_version != 'luajit'
+        run: |
+          curl -R -O http://www.lua.org/ftp/lua-${{ matrix.lua_version }}.tar.gz
+          tar -zxf lua-${{ matrix.lua_version }}.tar.gz
+          cd lua-${{ matrix.lua_version }}/src
+          make -j$(nproc) all MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses" MYCFLAGS="-DLUA_USE_LINUX -DLUA_USE_READLINE -fPIC"
+          cd ..
+          sudo make install
+
+      - name: Install LuaRocks
+        run: |
+          wget https://luarocks.org/releases/luarocks-3.8.0.tar.gz
+          tar zxpf luarocks-3.8.0.tar.gz
+          cd luarocks-3.8.0
+          ./configure --with-lua-include=/usr/local/include
+          make -j$(nproc)
+          sudo make install
+
       - uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
 
+      - uses: actions/checkout@v3.0.2
+
       - name: Install tools
         run: |
-          luarocks install ldoc
-          luarocks install lua-discount
+          sudo luarocks install ldoc
+          sudo luarocks install lua-discount
           npm install -g sass
 
-      - name: Install dependencies
-        shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libx11-dev libxrandr-dev
-
       - name: Make rock
-        run: make rock LUA_VERSION=${{ matrix.lua_version }}
+        run: luarocks --local make rocks/lua-xlib-scm-3.rockspec
