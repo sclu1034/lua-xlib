@@ -20,3 +20,11 @@ void luaL_setfuncs(lua_State* L, const luaL_Reg* l, int nup) {
     lua_pop(L, nup); /* remove upvalues */
 }
 #endif
+
+void luaU_setstringfield(lua_State* L, int index, const char* key, const char* value) {
+    // Since we alter the stack before accessing the actual table index, we need to make
+    // sure to store its absolute index.
+    index = index < 0 ? lua_gettop(L) + index + 1 : index;
+    lua_pushstring(L, value);
+    lua_setfield(L, index, key);
+}

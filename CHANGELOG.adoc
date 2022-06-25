@@ -16,7 +16,8 @@
 * `xrandr.XRRSelectInput`
 * `xrandr.XRRGetScreenSizeRange` & `xrandr.XRRSetScreenSize`
 * `xlib.XCloseDisplay`
-* handling `Atom`s
+* handling for XLib `Atom`s
+* handling for XRandR output properties
 
 == v0.1.1 - 2022-06-08
 

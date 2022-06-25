@@ -3,6 +3,7 @@
 #include "lua_util.h"
 #include "xlib.h"
 
+#include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/randr.h>
 #include <assert.h>
@@ -516,6 +517,161 @@ int xrandr_set_screen_size(lua_State* L) {
 }
 
 
+int xrandr_list_output_properties(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    int nprop = 0;
+    Atom* properties = XRRListOutputProperties(display->inner, output, &nprop);
+
+    lua_createtable(L, 0, nprop);
+    for (int i = 0; i < nprop; ++i) {
+        lua_pushinteger(L, properties[i]);
+        lua_rawseti(L, -2, i + 1);
+    }
+
+    return 1;
+}
+
+int xrandr_query_output_property(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    Atom property = (Atom) luaL_checkinteger(L, 3);
+
+    XRRPropertyInfo* info = XRRQueryOutputProperty(display->inner, output, property);
+
+    if (!info) {
+        return luaL_error(L, "Failed to query output property %d", property);
+    }
+
+    lua_createtable(L, 4, 0);
+
+    lua_pushboolean(L, info->pending);
+    lua_setfield(L, -2, "pending");
+
+    lua_pushboolean(L, info->range);
+    lua_setfield(L, -2, "range");
+
+    lua_pushboolean(L, info->immutable);
+    lua_setfield(L, -2, "immutable");
+
+    lua_createtable(L, 0, info->num_values);
+    for (int i = 0; i < info->num_values; ++i) {
+        lua_pushinteger(L, info->values[i]);
+        lua_rawseti(L, -2, i + 1);
+    }
+    lua_setfield(L, -2, "values");
+
+    XFree(info);
+    return 1;
+}
+
+int xrandr_configure_output_property(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    Atom property = (Atom) luaL_checkinteger(L, 3);
+    Bool pending = lua_toboolean(L, 4);
+    Bool range = lua_toboolean(L, 5);
+    luaL_checktype(L, 6, LUA_TTABLE);
+
+    int num_values = lua_rawlen(L, 6);
+    long* values = calloc(num_values, sizeof(long));
+
+    for (int i = 0; i < num_values; ++i) {
+        lua_pushinteger(L, i + 1);
+        lua_gettable(L, 6);
+        values[i] = lua_tointeger(L, -1);
+        lua_pop(L, 1);
+    }
+
+    XRRConfigureOutputProperty(display->inner, output, property, pending, range, num_values, values);
+
+    free(values);
+    return 0;
+}
+
+int xrandr_change_output_property(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    Atom property = (Atom) luaL_checkinteger(L, 3);
+    int mode = (int) luaL_checkinteger(L, 4);
+    // For now we only support strings, so we hardcode the type.
+    // We still keep the parameter as a placeholder, so we don't need an API change later on,
+    // and still map properly to the signature in libxrandr.
+    Atom type = XA_STRING; // (Atom) luaL_checkinteger(L, 5);
+
+    int format = 8;
+    size_t nelements;
+    const unsigned char* data = (const unsigned char*) luaL_checklstring(L, 6, &nelements);
+
+    XRRChangeOutputProperty(display->inner, output, property, type, format, mode, data, (int) nelements);
+    return 0;
+}
+
+int xrandr_get_output_property(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    Atom property = (Atom) luaL_checkinteger(L, 3);
+    long offset = (long) luaL_checkinteger(L, 4);
+    long length = (long) luaL_checkinteger(L, 5);
+    Bool delete = (Bool) lua_toboolean(L, 6);
+    Bool pending = (Bool) lua_toboolean(L, 7);
+    // As with changing the output, we hardcode the type for now and keep the parameter only as placeholder.
+    // As its the last parameter, that's trivial anyways.
+    Atom req_type = XA_STRING; // (Atom) luaL_checkinteger(L, 8);
+
+    Atom actual_type;
+    int actual_format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    unsigned char* prop;
+
+    XRRGetOutputProperty(display->inner,
+                         output,
+                         property,
+                         offset,
+                         length,
+                         delete,
+                         pending,
+                         req_type,
+                         &actual_type,
+                         &actual_format,
+                         &nitems,
+                         &bytes_after,
+                         &prop);
+
+    // `type == None` is returned when the property doesn't exist.
+    if (actual_type == None) {
+        return 0;
+    }
+
+    // If there is a returned type, but no data, the requested type did not match the actual type.
+    if (!prop) {
+        return luaL_error(L, "Only properties of type `string` are currently supported. Got `(Atom) %d`.", actual_type);
+    }
+
+    // if (actual_format != 8) {
+    //     return luaL_error(L, "Only byte format `8` is currently supported. Got `%d`.", actual_format);
+    // }
+
+    lua_pushlstring(L, (char*) prop, length);
+    lua_pushinteger(L, nitems);
+    lua_pushinteger(L, actual_type);
+    lua_pushinteger(L, actual_format);
+    lua_pushinteger(L, bytes_after);
+
+    return 2;
+}
+
+int xrandr_delete_output_property(lua_State* L) {
+    display_t* display = luaL_checkudata(L, 1, LUA_XLIB_DISPLAY);
+    RROutput output = (RROutput) luaL_checkinteger(L, 2);
+    Atom property = (Atom) luaL_checkinteger(L, 3);
+
+    XRRDeleteOutputProperty(display->inner, output, property);
+    return 0;
+}
+
+
 LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
     luaL_newmetatable(L, LUA_XRANDR_SCREEN_RESOURCES);
     luaL_setfuncs(L, screen_resources_mt, 0);
@@ -536,5 +692,22 @@ LUA_MOD_EXPORT int luaopen_xlib_xrandr(lua_State* L) {
 #else
     luaL_newlib(L, xrandr_lib);
 #endif
+
+    lua_createtable(L, 13, 0);
+    luaU_setstringfield(L, -1, "BACKLIGHT", "Backlight");
+    luaU_setstringfield(L, -1, "RANDR_EDID", "EDID");
+    luaU_setstringfield(L, -1, "SIGNAL_FORMAT", "SignalFormat");
+    luaU_setstringfield(L, -1, "SIGNAL_PROPERTIES", "SignalProperties");
+    luaU_setstringfield(L, -1, "CONNECTOR_TYPE", "ConnectorType");
+    luaU_setstringfield(L, -1, "CONNECTOR_NUMBER", "ConnectorNumber");
+    luaU_setstringfield(L, -1, "COMPATIBILITY_LIST", "CompatibilityList");
+    luaU_setstringfield(L, -1, "CLONE_LIST", "CloneList");
+    luaU_setstringfield(L, -1, "BORDER", "Border");
+    luaU_setstringfield(L, -1, "BORDER_DIMENSIONS", "BorderDimensions");
+    luaU_setstringfield(L, -1, "GUID", "GUID");
+    luaU_setstringfield(L, -1, "RANDR_TILE", "TILE");
+    luaU_setstringfield(L, -1, "NON_DESKTOP", "non-desktop");
+    lua_setfield(L, -2, "RR_OUTPUT");
+
     return 1;
 }

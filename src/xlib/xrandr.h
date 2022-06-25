@@ -11,6 +11,8 @@
 #ifndef xrandr_h_INCLUDED
 #define xrandr_h_INCLUDED
 
+#include "lua_util.h"
+
 #include <X11/extensions/Xrandr.h>
 #include <lauxlib.h>
 #include <lua.h>
@@ -41,6 +43,25 @@ static const char* mode_flags[14] = {
 };
 
 
+/** An enum of well-known output property names.
+ *
+ * @table RR_OUTPUT
+ * @field[type=string] BACKLIGHT `Backlight`
+ * @field[type=string] RANDR_EDID `EDID`
+ * @field[type=string] SIGNAL_FORMAT `SignalFormat`
+ * @field[type=string] SIGNAL_PROPERTIES `SignalProperties`
+ * @field[type=string] CONNECTOR_TYPE `ConnectorType`
+ * @field[type=string] CONNECTOR_NUMBER `ConnectorNumber`
+ * @field[type=string] COMPATIBILITY_LIST `CompatibilityList`
+ * @field[type=string] CLONE_LIST `CloneList`
+ * @field[type=string] BORDER `Border`
+ * @field[type=string] BORDER_DIMENSIONS `BorderDimensions`
+ * @field[type=string] GUID `GUID`
+ * @field[type=string] RANDR_TILE `TILE`
+ * @field[type=string] NON_DESKTOP `non-desktop`
+ */
+
+
 /** Queries the maximum supported extension version from the server.
  *
  * The return values of the major and minor extension version are only defined when
@@ -67,10 +88,10 @@ int xrandr_query_extension(lua_State*);
 
 
 /**
- * @table XRRScreenConfiguration
- *
  * This only functions as a marker. Values need to be retrieved through the `XRRConfig*` functions, such as
  * @{XRRConfigCurrentRate}.
+ *
+ * @table XRRScreenConfiguration
  */
 typedef struct {
     XRRScreenConfiguration* inner;
@@ -319,6 +340,138 @@ int xrandr_get_output_primary(lua_State*);
 int xrandr_set_output_primary(lua_State*);
 
 
+/*
+ * Internal representation of the property data.
+ */
+typedef struct {
+    int type;
+    void* data;
+} output_property_data_t;
+
+#define LUA_TINTEGER
+
+
+/** Returns the list of properties on the given output.
+ *
+ * This returns a list of `Atom`s (mapped to simple integer numbers).
+ * Metadata of the property can be queried with using @{XRRQueryOutputProperty},
+ * values with @{XRRGetOutputProperty}.
+ *
+ * @function XRRListOutputProperties
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @treturn number
+ */
+int xrandr_list_output_properties(lua_State*);
+
+/**
+ * If `pending == true`, changes to the property via @{XRRChangeOutputProperty} will be queued
+ * until the next call to @{XRRSetCrtcConfig}.
+ *
+ * If `range == true`, `values` will contain exactly two entries, that denote the minimum and maximum
+ * values for the property. Otherwise `values` is a list of valid values.
+ *
+ * If `immutable == true`, the property cannot be changed by the client.
+ *
+ * @table XRRPropertyInfo
+ * @field[type=bool] pending
+ * @field[type=bool] range
+ * @field[type=bool] immutable
+ * @field[type=table] values
+ */
+
+/** Returns metadata about an output property.
+ *
+ * @function XRRQueryOutputProperty
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @tparam number property An X11 `Atom`.
+ * @treturn XRRPropertyInfo
+ */
+int xrandr_query_output_property(lua_State*);
+
+/** Sets the metadata for an output property.
+ *
+ * See @{XRRPropertyInfo} for the semantics of the various metadata fields.
+ *
+ * @function XRRConfigureOutputProperty
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @tparam number property An X11 `Atom`.
+ * @tparam boolean pending
+ * @tparam boolean range
+ * @tparam table values
+ */
+int xrandr_configure_output_property(lua_State*);
+
+/** Changes the value of an output property.
+ *
+ * The value has to match with the metadata from @{XRRQueryOutputProperty}.
+ *
+ * For now, only @{string} values are supported, and they are treated as raw, unsigned byte buffers.
+ *
+ * If "append" or "prepend" modes are chosen, the types of the existing and new values must match.
+ * For undefined properties, all three modes work the same.
+ *
+ * The maximum allowed size of the property data depends on the server implementation,
+ * and may change dynamically at runtime or between resets.
+ * The lifetime of a property is tied to the output and server, not the client that set it.
+ *
+ * @function XRRChangeOutputProperty
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @tparam number property An X11 `Atom`.
+ * @tparam number type An X11 `Atom`.
+ * @tparam number|nil mode If `1`, prepend data. If `2`, append data. Otherwise replace data.
+ * @tparam string data
+ */
+int xrandr_change_output_property(lua_State*);
+
+/** Returns the value of an output property.
+ *
+ * As with @{XRRChangeOutputProperty}, only properties of type @{string}
+ * (which maps to Xorg's `XA_STRING` from `X11/Xatom.h`) are currently supported. The `req_type` property
+ * is just a placeholder because of that.
+ *
+ * If there is no such property, the function will return nothing.
+ *
+ * For properties of unknown length, first call this function with `offset == 0`, `length == 0`,
+ * and the second return value will report the full length of the value. Then call the function
+ * a second time with the desired offset and length.
+ *
+ * @function XRRGetOutputProperty
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @tparam number property An X11 `Atom`.
+ * @tparam number offset The offset at which to start reading the return value.
+ * @tparam number length The amount of bytes (regardless of the element size) to read into the return value.
+ * @tparam boolean delete If `true`, delete the property after reading.
+ * @tparam boolean pending If `true` and there is a pending change for the property, return that change
+ *  instead of the current value.
+ * @tparam[opt] number req_type An X11 `Atom`. Currently ignored and hardcoded to XLib's `XA_STRING`.
+ * @treturn string The data.
+ * @treturn number The number of elements in the value, as passed when setting the property
+ *  (see @{XRRChangeOutputProperty}).
+ * @treturn number The element size of the byte array as passed when setting the property. One of `8`, `16`, `32`.
+ * @treturn number The number of bytes (regardless of the element size) left in the value.
+ * @usage
+ * -- Check the length
+ * local _, length = xrandr.XRRGetOutputProperty(display, output, atom, 0, 0)
+ * local value, nitems, format = xrandr.XRRGetOutputProperty(display, output, atom, 0, length)
+ * print(value) -- may be arbitrary, non-printable bytes. If so, use `nitems` and `format` to interpret it
+ */
+int xrandr_get_output_property(lua_State*);
+
+/** Deletes the property from the given output.
+ *
+ * @function XRRDeleteOutputProperty
+ * @tparam display display A display connection opened with @{xlib.XOpenDisplay}.
+ * @tparam number output The XID of the output.
+ * @tparam number property An X11 `Atom`.
+ */
+int xrandr_delete_output_property(lua_State*);
+
+
 static const struct luaL_Reg output_info_mt[] = {
     {"__gc",     output_info__gc   },
     { "__index", output_info__index},
@@ -469,6 +622,12 @@ static const struct luaL_Reg xrandr_lib[] = {
     { "XRRConfigCurrentRate",          xrandr_config_current_rate         },
     { "XRRGetScreenSizeRange",         xrandr_get_screen_size_range       },
     { "XRRSetScreenSize",              xrandr_set_screen_size             },
+    { "XRRListOutputProperties",       xrandr_list_output_properties      },
+    { "XRRQueryOutputProperty",        xrandr_query_output_property       },
+    { "XRRConfigureOutputProperty",    xrandr_configure_output_property   },
+    { "XRRChangeOutputProperty",       xrandr_change_output_property      },
+    { "XRRDeleteOutputProperty",       xrandr_delete_output_property      },
+    { "XRRGetOutputProperty",          xrandr_get_output_property         },
     { NULL,                            NULL                               }
 };
 
