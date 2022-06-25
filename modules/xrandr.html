@@ -115,6 +115,30 @@
                         <td class="summary">Sets the given output as primary for the window.</td>
                     </tr>
                     <tr>
+                        <td class="name"><a href="#XRRListOutputProperties">XRRListOutputProperties(display, output)</a></td>
+                        <td class="summary">Returns the list of properties on the given output.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRQueryOutputProperty">XRRQueryOutputProperty(display, output, property)</a></td>
+                        <td class="summary">Returns metadata about an output property.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRConfigureOutputProperty">XRRConfigureOutputProperty(display, output, property, pending, range, values)</a></td>
+                        <td class="summary">Sets the metadata for an output property.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRChangeOutputProperty">XRRChangeOutputProperty(display, output, property, type, mode, data)</a></td>
+                        <td class="summary">Changes the value of an output property.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRGetOutputProperty">XRRGetOutputProperty(display, output, property, offset, length, delete, pending[, req_type])</a></td>
+                        <td class="summary">Returns the value of an output property.</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRDeleteOutputProperty">XRRDeleteOutputProperty(display, output, property)</a></td>
+                        <td class="summary">Deletes the property from the given output.</td>
+                    </tr>
+                    <tr>
                         <td class="name"><a href="#XRRGetCrtcInfo">XRRGetCrtcInfo(display, resources, crtc)</a></td>
                         <td class="summary">Returns information about the given CRTC.</td>
                     </tr>
@@ -140,8 +164,12 @@
             <table class="table is-fullwidth is-striped">
                 <tbody>
                     <tr>
+                        <td class="name"><a href="#RR_OUTPUT">RR_OUTPUT</a></td>
+                        <td class="summary">An enum of well-known output property names.</td>
+                    </tr>
+                    <tr>
                         <td class="name"><a href="#XRRScreenConfiguration">XRRScreenConfiguration</a></td>
-                        <td class="summary"></td>
+                        <td class="summary">This only functions as a marker.</td>
                     </tr>
                     <tr>
                         <td class="name"><a href="#XRRModeFlags">XRRModeFlags</a></td>
@@ -158,6 +186,11 @@
                     <tr>
                         <td class="name"><a href="#XRROutputInfo">XRROutputInfo</a></td>
                         <td class="summary"></td>
+                    </tr>
+                    <tr>
+                        <td class="name"><a href="#XRRPropertyInfo">XRRPropertyInfo</a></td>
+                        <td class="summary">If <code>pending == true</code>, changes to the property via <a href="../modules/xrandr.html#XRRChangeOutputProperty">XRRChangeOutputProperty</a> will be queued
+ until the next call to <a href="../modules/xrandr.html#XRRSetCrtcConfig">XRRSetCrtcConfig</a>.</td>
                     </tr>
                     <tr>
                         <td class="name"><a href="#XRRCrtcInfo">XRRCrtcInfo</a></td>
@@ -1195,6 +1228,606 @@
                         </ul>
                     </div>
                 </div>
+                <div id="XRRListOutputProperties" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRListOutputProperties(display, output)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the list of properties on the given output.</p>
+
+<p> This returns a list of <code>Atom</code>s (mapped to simple integer numbers).
+ Metadata of the property can be queried with using <a href="../modules/xrandr.html#XRRQueryOutputProperty">XRRQueryOutputProperty</a>,
+ values with <a href="../modules/xrandr.html#XRRGetOutputProperty">XRRGetOutputProperty</a>.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRQueryOutputProperty" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRQueryOutputProperty(display, output, property)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns metadata about an output property.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>property</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="../modules/xrandr.html#XRRPropertyInfo">XRRPropertyInfo</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRConfigureOutputProperty" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRConfigureOutputProperty(display, output, property, pending, range, values)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Sets the metadata for an output property.</p>
+
+<p> See <a href="../modules/xrandr.html#XRRPropertyInfo">XRRPropertyInfo</a> for the semantics of the various metadata fields.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>property</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>pending</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>range</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>values</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRChangeOutputProperty" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRChangeOutputProperty(display, output, property, type, mode, data)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Changes the value of an output property.</p>
+
+<p> The value has to match with the metadata from <a href="../modules/xrandr.html#XRRQueryOutputProperty">XRRQueryOutputProperty</a>.</p>
+
+<p> For now, only <a href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a> values are supported, and they are treated as raw, unsigned byte buffers.</p>
+
+<p> If &ldquo;append&rdquo; or &ldquo;prepend&rdquo; modes are chosen, the types of the existing and new values must match.
+ For undefined properties, all three modes work the same.</p>
+
+<p> The maximum allowed size of the property data depends on the server implementation,
+ and may change dynamically at runtime or between resets.
+ The lifetime of a property is tied to the output and server, not the client that set it.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>property</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>type</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>mode</em></span>
+                                    <span class="parameter__description">:&nbsp; If <code>1</code>, prepend data. If <code>2</code>, append data. Otherwise replace data.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span> or <span class="type">nil</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>data</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="XRRGetOutputProperty" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRGetOutputProperty(display, output, property, offset, length, delete, pending[, req_type])</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Returns the value of an output property.</p>
+
+<p> As with <a href="../modules/xrandr.html#XRRChangeOutputProperty">XRRChangeOutputProperty</a>, only properties of type <a href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a>
+ (which maps to Xorg&rsquo;s <code>XA_STRING</code> from <code>X11/Xatom.h</code>) are currently supported. The <code>req_type</code> property
+ is just a placeholder because of that.</p>
+
+<p> If there is no such property, the function will return nothing.</p>
+
+<p> For properties of unknown length, first call this function with <code>offset == 0</code>, <code>length == 0</code>,
+ and the second return value will report the full length of the value. Then call the function
+ a second time with the desired offset and length.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>property</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>offset</em></span>
+                                    <span class="parameter__description">:&nbsp; The offset at which to start reading the return value.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>length</em></span>
+                                    <span class="parameter__description">:&nbsp; The amount of bytes (regardless of the element size) to read into the return value.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>delete</em></span>
+                                    <span class="parameter__description">:&nbsp; If <code>true</code>, delete the property after reading.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>pending</em></span>
+                                    <span class="parameter__description">:&nbsp; If <code>true</code> and there is a pending change for the property, return that change
+  instead of the current value.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">boolean</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>req_type</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>. Currently ignored and hardcoded to XLib&rsquo;s <code>XA_STRING</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="control">
+                                        <div class="tags">
+                                            <span class="tag parameter__optional">optional</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="block content section__item__returns">
+                        <h4 class="title is-6">Returns:</h4>
+                        <ul>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>The data.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>The number of elements in the value, as passed when setting the property
+  (see <a href="../modules/xrandr.html#XRRChangeOutputProperty">XRRChangeOutputProperty</a>).</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>The element size of the byte array as passed when setting the property. One of <code>8</code>, <code>16</code>, <code>32</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="return-value">
+                                <div class="return-value__description">
+                                    <span>The number of bytes (regardless of the element size) left in the value.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag return-value__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block content section__item__usage">
+                        <h4 class="title is-6">Usage:</h4>
+                            <pre class="code-block code-block--lua"><span class="comment">-- Check the length
+</span><span class="keyword">local</span> _, length = xrandr.XRRGetOutputProperty(display, output, atom, <span class="number">0</span>, <span class="number">0</span>)
+<span class="keyword">local</span> value, nitems, format = xrandr.XRRGetOutputProperty(display, output, atom, <span class="number">0</span>, length)
+<span class="global">print</span>(value) <span class="comment">-- may be arbitrary, non-printable bytes. If so, use `nitems` and `format` to interpret it</span></pre>
+                    </div>
+                </div>
+                <div id="XRRDeleteOutputProperty" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRDeleteOutputProperty(display, output, property)</strong>
+                    </div>
+
+                    <div class="block content section__item__description">Deletes the property from the given output.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Parameters:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>display</em></span>
+                                    <span class="parameter__description">:&nbsp; A display connection opened with <a href="../modules/xlib.html#XOpenDisplay">xlib.XOpenDisplay</a>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">display</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>output</em></span>
+                                    <span class="parameter__description">:&nbsp; The XID of the output.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>property</em></span>
+                                    <span class="parameter__description">:&nbsp; An X11 <code>Atom</code>.</span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">number</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
                 <div id="XRRGetCrtcInfo" class="box section__item">
                     <div class="block section__item__title">
                         <strong>XRRGetCrtcInfo(display, resources, crtc)</strong>
@@ -1810,12 +2443,209 @@
         <div class="container">
             <h2 class="title is-2" id="Tables"><a href="#Tables">Tables</a></h2>
             <div class="section__content">
+                <div id="RR_OUTPUT" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>RR_OUTPUT</strong>
+                    </div>
+
+                    <div class="block content section__item__description">An enum of well-known output property names.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>BACKLIGHT</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>Backlight</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>RANDR_EDID</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>EDID</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>SIGNAL_FORMAT</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>SignalFormat</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>SIGNAL_PROPERTIES</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>SignalProperties</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CONNECTOR_TYPE</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>ConnectorType</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CONNECTOR_NUMBER</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>ConnectorNumber</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>COMPATIBILITY_LIST</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>CompatibilityList</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>CLONE_LIST</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>CloneList</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>BORDER</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>Border</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>BORDER_DIMENSIONS</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>BorderDimensions</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>GUID</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>GUID</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>RANDR_TILE</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>TILE</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>NON_DESKTOP</em></span>
+                                    <span class="parameter__description">:&nbsp; <code>non-desktop</code></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
                 <div id="XRRScreenConfiguration" class="box section__item">
                     <div class="block section__item__title">
                         <strong>XRRScreenConfiguration</strong>
                     </div>
 
-                    <div class="block content section__item__description"></div>
+                    <div class="block content section__item__description">This only functions as a marker.  Values need to be retrieved through the <code>XRRConfig*</code> functions, such as
+ <a href="../modules/xrandr.html#XRRConfigCurrentRate">XRRConfigCurrentRate</a>.</div>
 
                 </div>
                 <div id="XRRModeFlags" class="box section__item">
@@ -2396,6 +3226,78 @@
                         </ul>
                     </div>
                 </div>
+                <div id="XRRPropertyInfo" class="box section__item">
+                    <div class="block section__item__title">
+                        <strong>XRRPropertyInfo</strong>
+                    </div>
+
+                    <div class="block content section__item__description">If <code>pending == true</code>, changes to the property via <a href="../modules/xrandr.html#XRRChangeOutputProperty">XRRChangeOutputProperty</a> will be queued
+ until the next call to <a href="../modules/xrandr.html#XRRSetCrtcConfig">XRRSetCrtcConfig</a>.</p>
+
+<p> If <code>range == true</code>, <code>values</code> will contain exactly two entries, that denote the minimum and maximum
+ values for the property. Otherwise <code>values</code> is a list of valid values.</p>
+
+<p> If <code>immutable == true</code>, the property cannot be changed by the client.</div>
+
+                    <div class="block content section__item__params">
+                        <h4 class="title is-6">Fields:</h4>
+                        <ul>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>pending</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">bool</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>range</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">bool</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>immutable</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><span class="type">bool</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="parameter">
+                                <div>
+                                    <span class="parameter__name"><em>values</em></span>
+                                </div>
+                                <div class="field is-grouped is-grouped-multiline parameter__tags">
+                                    <div class="control">
+                                        <div class="tags has-addons">
+                                            <span class="tag is-dark">type</span>
+                                            <span class="tag parameter__type"><span><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
                 <div id="XRRCrtcInfo" class="box section__item">
                     <div class="block section__item__title">
                         <strong>XRRCrtcInfo</strong>
@@ -2495,7 +3397,7 @@
 
 <footer class="footer">
     <div class="content has-text-centered">
-        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-25 10:02:33.
+        Generated by <a href="https://github/com/stevendonovan/LDoc">LDoc 1.4.6</a>, designed with <a href="https://github.com/jgthms/bulma">Bulma</a>. Last updated at 2022-06-25 22:25:57.
     </div>
 </footer>
 
