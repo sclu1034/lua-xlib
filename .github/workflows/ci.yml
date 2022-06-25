@@ -46,6 +46,9 @@ jobs:
           make -j$(nproc)
           sudo make install
 
+      - name: Install Busted
+        run: sudo luarocks install busted
+
       - uses: actions/checkout@v3.0.2
 
       - name: Build
@@ -53,6 +56,9 @@ jobs:
           cmake -S . -B build -DCI=ON
           cd build
           make -j$(nproc) xlib
+
+      - name: Run tests
+        run: xvfb-run busted --config-file=.busted.lua --output=TAP
 
   rock:
     runs-on: ubuntu-20.04
