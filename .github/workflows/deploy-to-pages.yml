@@ -12,23 +12,24 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2.4.0
-      - uses: leafo/gh-actions-lua@v8.0.0
-      - uses: leafo/gh-actions-luarocks@v4.0.0
       - uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
 
       - name: Install dependencies
         run: |
-          luarocks install ldoc
-          luarocks install lua-discount
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends lua5.3 lua-ldoc lua-discount
           npm install --global sass
 
       - name: Generate documentation
-        run: make doc
+        run: |
+          cmake -S . -B build -DCI=ON
+          cd build
+          make docs
 
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: gh-pages
-          folder: out/doc
+          folder: build/doc

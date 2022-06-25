@@ -1,10 +1,10 @@
 status = [
-    "check",
-    "test (5.1)",
-    "test (5.2)",
-    "test (5.3)",
-    "test (luajit)",
-    "rock (5.1)",
-    "rock (5.2)",
-    "rock (5.3)",
+    "test (5.1.5)",
+    "test (5.2.4)",
+    "test (5.3.6)",
+    "test (5.4.4)",
+    "rock (5.1.5)",
+    "rock (5.2.4)",
+    "rock (5.3.6)",
+    "rock (5.4.4)",
 ]
