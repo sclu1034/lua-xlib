@@ -9,5 +9,5 @@ build: cmake
 rock version="scm-3":
     luarocks --local make rocks/lua-xlib-{{ version }}.rockspec
 
-run:
-    env LUA_CPATH="./{{ build_dir }}/?.so;$${LUA_CPATH}" xvfb-run lua test.lua
+run file="test.lua":
+    env LUA_CPATH_5_4="./{{ build_dir }}/?.so;${LUA_CPATH_5_4}" xvfb-run lua5.4 {{ file }}
