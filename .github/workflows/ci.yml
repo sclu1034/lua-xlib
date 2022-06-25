@@ -27,6 +27,9 @@ jobs:
             libxrandr-dev \
             libreadline-dev
 
+      # `-fPIC` is the custom flag we need to add here, but Lua's Makefiles only allow configuration by manual
+      # edits in the file. Which is not a great way to do automatically.
+      # So instead of using the intended `make linux` target, we need to specify _all_ build flags manually.
       - name: Install Lua ${{ matrix.lua_version }}
         shell: /bin/bash -o errexit -o pipefail -o xtrace {0}
         run: |

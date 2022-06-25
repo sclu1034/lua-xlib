@@ -16,11 +16,18 @@ jobs:
         with:
           node-version: 'lts/*'
 
+      # LDoc in packages is built against Lua 5.2, so I need to use that
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends lua5.3 lua-ldoc lua-discount
-          npm install --global sass
+          sudo apt-get install -y --no-install-recommends \
+            libx11-dev \
+            libxrandr-dev \
+            lua5.2 \
+            liblua5.2-dev \
+            lua-ldoc \
+            lua-discount
+          npm install --location=global sass
 
       - name: Generate documentation
         run: |
