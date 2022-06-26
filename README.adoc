@@ -30,6 +30,19 @@ image:{url-luarocks-badge}[LuaRocks Package, link={url-luarocks-link}]
 
 Lua bindings for https://x.org/releases/current/doc/libX11/libX11/libX11.html[XLib] and  https://www.x.org/wiki/libraries/libxrandr[libxrandr].
 
+== Archived just 3 weeks after the first commit? What's going on?
+
+When I started this project, I knew that XCB existed as a newer option to XLib. What I didn't know was the
+extend of what XCB replaces in XLib's ecosystem.
+
+The initial trigger for _lua-xlib_ was the need for XRandR bindings, with only adding as many XLib functions
+as was needed to make the XRandR function usable. The fact that all of _libxrandr_'s calls are blocking didn't
+feel right, but I figured that this might just be necessary for this protocol specifically.
+
+Only when I casually browsed the XCB docs did I realize that it seems to be intended as a replacement for _all_ of the XLib ecosystem, including RandR, Render and other protocol additions. So, after learning that and the non-blocking nature of XCB, and reading the https://www.x.org/wiki/guide/xlib-and-xcb/[XLib vs XCB rational], I now consider XCB bindings to be a better fit for my use case.
+
+Nonetheless, the things implemented in _lua-xlib_ so far should still work.
+
 == Quick Start
 
 Install _lua-xlib_ via LuaRocks:
